@@ -53,6 +53,15 @@
             "Koh\\IndexNow\\Sylius\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://git.ole-hartwig.eu/api/v4/group/1091/-/packages/composer/packages.json",
+            "only": [
+                "koh/*"
+            ]
+        }
+    ],
     "extra": {
         "branch-alias": {
             "dev-main": "1.0-dev"
