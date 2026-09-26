@@ -26,7 +26,7 @@
         "doctrine/dbal": "^3.8 || ^4.0",
         "doctrine/migrations": "^3.7",
         "doctrine/orm": "^2.18 || ^3.0",
-        "guzzlehttp/psr7": "^2.6",
+        "guzzlehttp/psr7": "^2.12.3",
         "koh/indexnow": "^1.0",
         "psr/log": "^2.0 || ^3.0",
         "sylius/sylius": "^2.0",
