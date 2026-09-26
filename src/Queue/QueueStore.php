@@ -70,7 +70,11 @@ class QueueStore
         return $added;
     }
 
-    /** @return list<QueueItem> */
+    /**
+     * @return list<QueueItem>
+     *
+     * @phpstan-impure reads a table that changes between calls
+     */
     public function due(int $limit, ?int $now = null): array
     {
         $rows = $this->connection->createQueryBuilder()
@@ -118,7 +122,11 @@ class QueueStore
         $this->connection->update(Tables::QUEUE, ['attempts' => $attempts, 'not_before' => $notBefore], ['id' => $id]);
     }
 
-    /** @return array{total: int, due: int, retrying: int} */
+    /**
+     * @return array{total: int, due: int, retrying: int}
+     *
+     * @phpstan-impure
+     */
     public function statistics(?int $now = null): array
     {
         $row = $this->connection->fetchAssociative(
