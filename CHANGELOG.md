@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.3](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.2...v1.0.3) (2026-09-26)
+
+### :bug: Fixes
+
+* **deps:** update dependency php to ^8.5.11 ([5db1df8](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/5db1df84c34bd73c9d40857363dec03d1edd0b2c))
+
 ## [1.0.2](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.1...v1.0.2) (2026-09-26)
 
 ### :bug: Fixes
