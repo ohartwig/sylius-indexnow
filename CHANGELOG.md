@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.4](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.3...v1.0.4) (2026-09-26)
+
+### :bug: Fixes
+
+* **deps:** update composer packages ([d90a42b](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/d90a42bc0756316d16b14ad12db5ab96be516fa8))
+
 ## [1.0.3](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.2...v1.0.3) (2026-09-26)
 
 ### :bug: Fixes
