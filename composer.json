@@ -29,7 +29,7 @@
         "guzzlehttp/psr7": "^2.6",
         "koh/indexnow": "^1.0",
         "psr/log": "^2.0 || ^3.0",
-        "sylius/sylius": "^2.0",
+        "sylius/sylius": "^2.0.18",
         "symfony/config": "^7.4 || ^8.0",
         "symfony/console": "^7.4 || ^8.0",
         "symfony/dependency-injection": "^7.4 || ^8.0",
