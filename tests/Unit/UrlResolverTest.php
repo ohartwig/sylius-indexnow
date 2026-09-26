@@ -106,4 +106,74 @@ final class UrlResolverTest extends TestCase
 
         self::assertSame([], $shop->resolver($shop->gate())->resolve(Subject::product(10)));
     }
+
+    #[Test]
+    public function theMenuRootItselfBelongsToTheMenu(): void
+    {
+        $shop = new Shop();
+        $root = $shop->taxon(1, ['de_DE' => 'kategorie'], null, 1, 10);
+        $shop->taxon(2, ['de_DE' => 'kategorie/letzte'], $root, 8, 9);
+        $shop->taxon(3, ['de_DE' => 'kategorie/ausserhalb'], $root, 11, 12);
+        $de = $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE']);
+        $de->setMenuTaxon($root);
+        $resolver = $shop->resolver($shop->gate());
+
+        self::assertSame(['https://shop-domain.de/de_DE/taxons/kategorie'], $resolver->resolve(Subject::taxon(1)));
+        self::assertSame(['https://shop-domain.de/de_DE/taxons/kategorie/letzte'], $resolver->resolve(Subject::taxon(2)), 'the right edge is inclusive');
+        self::assertSame([], $resolver->resolve(Subject::taxon(3)), 'outside the bounds');
+    }
+
+    #[Test]
+    public function aDisabledTaxonIsAnnouncedAsAChangeButNotAtGoLive(): void
+    {
+        $shop = new Shop();
+        $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE']);
+        $shop->taxon(5, ['de_DE' => 'alt'], enabled: false);
+        $resolver = $shop->resolver($shop->gate());
+
+        self::assertSame(['https://shop-domain.de/de_DE/taxons/alt'], $resolver->resolve(Subject::taxon(5)));
+        self::assertSame([], $resolver->resolve(Subject::taxon(5), strict: true));
+        self::assertSame([], $resolver->resolve(Subject::taxon(404)));
+        self::assertSame([], $resolver->resolve(Subject::product(404)));
+    }
+
+    #[Test]
+    public function aGoLiveProductDoesNotDragItsListingAlong(): void
+    {
+        $shop = new Shop();
+        $de = $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE']);
+        $shop->product(10, ['de_DE' => 'cohiba'], [$de], mainTaxon: $shop->taxon(5, ['de_DE' => 'kuba']));
+
+        self::assertSame(['https://shop-domain.de/de_DE/products/cohiba'], $shop->resolver($shop->gate())->resolve(Subject::product(10), strict: true));
+    }
+
+    #[Test]
+    public function emptySlugsAndDuplicatesProduceNoUrls(): void
+    {
+        $shop = new Shop();
+        $de = $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE', 'en_US']);
+        $taxon = $shop->taxon(5, ['de_DE' => 'kuba', 'en_US' => '']);
+        $shop->product(10, ['de_DE' => 'cohiba', 'en_US' => ''], [$de], mainTaxon: $taxon);
+
+        self::assertSame([
+            'https://shop-domain.de/de_DE/products/cohiba',
+            'https://shop-domain.de/de_DE/taxons/kuba',
+        ], $shop->resolver($shop->gate())->resolve(Subject::product(10)));
+    }
+
+    #[Test]
+    public function aPreResolvedUrlIsPassedThroughAndTheRouterContextIsRestored(): void
+    {
+        $shop = new Shop();
+        $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE']);
+        $routes = new \Symfony\Component\Routing\RouteCollection();
+        $routes->add('sylius_shop_homepage', new \Symfony\Component\Routing\Route('/{_locale}/'));
+        $context = new \Symfony\Component\Routing\RequestContext('', 'GET', 'admin.shop-domain.de', 'http');
+        $generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
+        $resolver = new \Koh\IndexNow\Sylius\Url\UrlResolver($shop->gate(), $generator, $shop->products, $shop->taxons, ['product' => 'x', 'taxon' => 'y', 'homepage' => 'sylius_shop_homepage']);
+
+        self::assertSame(['https://shop-domain.de/de_DE/'], $resolver->resolve(Subject::homepage()));
+        self::assertSame($context, $generator->getContext(), 'the admin request keeps its own host');
+        self::assertSame(['https://elsewhere.de/x'], $resolver->resolve(Subject::url('https://elsewhere.de/x')));
+    }
 }

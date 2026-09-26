@@ -1,0 +1,1519 @@
+Note: Pass `--log-verbosity=all` to log information about killed and errored mutants.
+Note: Pass `--debug` to log test-framework output.
+
+Escaped mutants:
+================
+
+1) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Activation/ChannelGate.php:50    [M] AssignCoalesce [ID] c28d0f6d47c1492372f0ee269bbd9e5a
+
+@@ @@
+     {
+         $host = HostName::normalize($host);
+
+-        return $this->cache[$host] ??= $this->evaluate($host);
++        return $this->cache[$host] = $this->evaluate($host);
+     }
+
+     /**
+
+
+2) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Activation/ChannelGate.php:63    [M] LogicalAnd [ID] 01bf837ec1d9a8f25c85949847657bdd
+
+@@ @@
+         $byHost = [];
+         foreach ($this->channels->findBy(['enabled' => true]) as $channel) {
+             $host = HostName::normalize((string) $channel->getHostname());
+-            if ($host !== '' && !isset($byHost[$host])) {
++            if ($host !== '' || !isset($byHost[$host])) {
+                 $byHost[$host] = $channel;
+             }
+         }
+
+
+3) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Activation/ChannelGate.php:71    [M] PublicVisibility [ID] 6f074a9a54e4fbaad7d962c1bc9960dd
+
+@@ @@
+         return $byHost;
+     }
+
+-    public function hostPolicy(): HostPolicy
++    protected function hostPolicy(): HostPolicy
+     {
+         return HostPolicy::default()->withDeniedSuffixes(...$this->deniedHostSuffixes);
+     }
+
+
+4) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Change/DoctrineChangeListener.php:92    [M] ReturnRemoval [ID] bc09965fe5ba9c1fab0892180ccc942e
+
+@@ @@
+         $subjects = $this->subjects;
+         $this->subjects = [];
+         if ($subjects === []) {
+-            return;
++
+         }
+
+         try {
+
+
+5) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Change/DoctrineChangeListener.php:98    [M] ArrayItemRemoval [ID] 36395ebd76c99e367870b5b13d856096
+
+@@ @@
+             $this->queue->enqueue($subjects, Reason::Change);
+         } catch (\Throwable $e) {
+             $this->logger->error('IndexNow: {count} changes could not be queued: {message}', [
+-                'count' => count($subjects),
+                 'message' => $e->getMessage(),
+                 'exception' => $e,
+             ]);
+
+
+6) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Change/DoctrineChangeListener.php:98    [M] MethodCallRemoval [ID] 001f643d84736ed7f6c8e858af40af8f
+
+@@ @@
+         try {
+             $this->queue->enqueue($subjects, Reason::Change);
+         } catch (\Throwable $e) {
+-            $this->logger->error('IndexNow: {count} changes could not be queued: {message}', [
+-                'count' => count($subjects),
+-                'message' => $e->getMessage(),
+-                'exception' => $e,
+-            ]);
++
+         }
+     }
+
+
+7) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Change/DoctrineChangeListener.php:100    [M] ArrayItem [ID] 71f851f1bf877c0247e8f9c6066fba81
+
+@@ @@
+         } catch (\Throwable $e) {
+             $this->logger->error('IndexNow: {count} changes could not be queued: {message}', [
+                 'count' => count($subjects),
+-                'message' => $e->getMessage(),
++                'message' > $e->getMessage(),
+                 'exception' => $e,
+             ]);
+         }
+
+
+8) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/RunCommand.php:39    [M] DecrementInteger [ID] 56be4ef23f910f1052e15d1e0b1d0e9f
+
+@@ @@
+     {
+         $io = new SymfonyStyle($input, $output);
+         $limit = $input->getOption('limit');
+-        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10000);
++        $report = $this->runner->run(is_numeric($limit) ? max(0, (int) $limit) : 10000);
+         if ($report === null) {
+             $io->note('Another IndexNow run is in progress; nothing done.');
+
+
+9) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/RunCommand.php:39    [M] IncrementInteger [ID] df2502876ec5d9ec23366d1d33459232
+
+@@ @@
+     {
+         $io = new SymfonyStyle($input, $output);
+         $limit = $input->getOption('limit');
+-        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10000);
++        $report = $this->runner->run(is_numeric($limit) ? max(2, (int) $limit) : 10000);
+         if ($report === null) {
+             $io->note('Another IndexNow run is in progress; nothing done.');
+
+
+10) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/RunCommand.php:39    [M] DecrementInteger [ID] a674e7c6c8351fc307b7751ec1a493b2
+
+@@ @@
+     {
+         $io = new SymfonyStyle($input, $output);
+         $limit = $input->getOption('limit');
+-        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10000);
++        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 9999);
+         if ($report === null) {
+             $io->note('Another IndexNow run is in progress; nothing done.');
+
+
+11) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/RunCommand.php:39    [M] IncrementInteger [ID] ced107f8575081823e4fb66412552b2c
+
+@@ @@
+     {
+         $io = new SymfonyStyle($input, $output);
+         $limit = $input->getOption('limit');
+-        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10000);
++        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10001);
+         if ($report === null) {
+             $io->note('Another IndexNow run is in progress; nothing done.');
+
+
+12) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/RunCommand.php:39    [M] Ternary [ID] 94898b3a140af38b9a2446cdc9cdf087
+
+@@ @@
+     {
+         $io = new SymfonyStyle($input, $output);
+         $limit = $input->getOption('limit');
+-        $report = $this->runner->run(is_numeric($limit) ? max(1, (int) $limit) : 10000);
++        $report = $this->runner->run(is_numeric($limit) ? 10000 : max(1, (int) $limit));
+         if ($report === null) {
+             $io->note('Another IndexNow run is in progress; nothing done.');
+
+
+13) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:35    [M] ArrayItemRemoval [ID] fef5984621675ac52c97dfdb2b3bd425
+
+@@ @@
+         foreach ($this->gate->channelsByHost() as $host => $channel) {
+             $activation = $this->gate->forHost($host);
+             $rows[] = [
+-                (string) $channel->getCode(),
+                 $host,
+                 $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
+                 $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
+
+
+14) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:36    [M] CastString [ID] ec8845b006181b7db236e56a1f221a1b
+
+@@ @@
+         foreach ($this->gate->channelsByHost() as $host => $channel) {
+             $activation = $this->gate->forHost($host);
+             $rows[] = [
+-                (string) $channel->getCode(),
++                $channel->getCode(),
+                 $host,
+                 $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
+                 $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
+
+
+15) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:38    [M] Ternary [ID] 32bd5065da71996f8d222b4c9de24b59
+
+@@ @@
+             $rows[] = [
+                 (string) $channel->getCode(),
+                 $host,
+-                $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
++                $activation->active ? '<comment>inactive</comment>' : '<info>active</info>',
+                 $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
+                 $this->queue->isFullySubmitted($host) ? 'yes' : 'no',
+             ];
+
+
+16) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:39    [M] LogicalAnd [ID] c21147f6574bfc7f80a33fee5a9fdaf1
+
+@@ @@
+                 (string) $channel->getCode(),
+                 $host,
+                 $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
+-                $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
++                $activation->active || $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
+                 $this->queue->isFullySubmitted($host) ? 'yes' : 'no',
+             ];
+         }
+
+
+17) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:39    [M] ConcatOperandRemoval [ID] ff33f2a51025de9203e322aad3241702
+
+@@ @@
+                 (string) $channel->getCode(),
+                 $host,
+                 $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
+-                $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
++                $activation->active && $activation->key !== null ? 'https://' . $host . '/' : $activation->reason,
+                 $this->queue->isFullySubmitted($host) ? 'yes' : 'no',
+             ];
+         }
+
+
+18) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:40    [M] Ternary [ID] 48a7bc2796214c4ca4369d455a6b3765
+
+@@ @@
+                 $host,
+                 $activation->active ? '<info>active</info>' : '<comment>inactive</comment>',
+                 $activation->active && $activation->key !== null ? 'https://' . $host . '/' . $activation->key->fileName() : $activation->reason,
+-                $this->queue->isFullySubmitted($host) ? 'yes' : 'no',
++                $this->queue->isFullySubmitted($host) ? 'no' : 'yes',
+             ];
+         }
+         $io->table(['Channel', 'Host', 'State', 'Key file / reason', 'Go-live sent'], $rows);
+
+
+19) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/StatusCommand.php:43    [M] ArrayItemRemoval [ID] 840451186056f7e1ff551362f96ccdde
+
+@@ @@
+                 $this->queue->isFullySubmitted($host) ? 'yes' : 'no',
+             ];
+         }
+-        $io->table(['Channel', 'Host', 'State', 'Key file / reason', 'Go-live sent'], $rows);
++        $io->table(['Host', 'State', 'Key file / reason', 'Go-live sent'], $rows);
+
+         $statistics = $this->queue->statistics();
+         $io->writeln(sprintf('Queue: %d entries, %d due, %d waiting after a failed attempt.', $statistics['total'], $statistics['due'], $statistics['retrying']));
+
+
+20) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/SubmitAllCommand.php:41    [M] UnwrapArrayFilter [ID] 934a08a15ad74e2adf163df1119fe313
+
+@@ @@
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+         $io = new SymfonyStyle($input, $output);
+-        $codes = array_filter((array) $input->getArgument('channel'), is_string(...));
++        $codes = (array) $input->getArgument('channel');
+
+         foreach ($this->urls->announcingChannels() as $host => $channel) {
+             if ($codes !== [] && !in_array($channel->getCode(), $codes, true)) {
+
+
+21) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/SubmitAllCommand.php:45    [M] Continue_ [ID] 03b9f78a548046f0924de319cd85baf1
+
+@@ @@
+
+         foreach ($this->urls->announcingChannels() as $host => $channel) {
+             if ($codes !== [] && !in_array($channel->getCode(), $codes, true)) {
+-                continue;
++                break;
+             }
+             $io->writeln(sprintf('%s (%s): %d entries queued', (string) $channel->getCode(), $host, $this->fullSubmission->queueChannel($channel)));
+         }
+
+
+22) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Command/SubmitAllCommand.php:49    [M] MethodCallRemoval [ID] b4ade66f51d77cc6f77bcfcd0f51c31c
+
+@@ @@
+             }
+             $io->writeln(sprintf('%s (%s): %d entries queued', (string) $channel->getCode(), $host, $this->fullSubmission->queueChannel($channel)));
+         }
+-        $io->note('Queued only. The next koh:indexnow:run sends them (see koh:indexnow:status).');
++
+
+         return Command::SUCCESS;
+     }
+
+
+23) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Http/KeyFileController.php:29    [M] LogicalOr [ID] 6f096015e6225890f88bd80ae041b0a7
+
+@@ @@
+     public function __invoke(Request $request, string $key): Response
+     {
+         $activation = $this->gate->forHost($request->getHost());
+-        if (!$activation->active || $activation->key === null || !$activation->key->isFilePath('/' . $key . '.txt')) {
++        if (!$activation->active && $activation->key === null || !$activation->key->isFilePath('/' . $key . '.txt')) {
+             throw new NotFoundHttpException();
+         }
+
+
+24) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:76    [M] TrueValue [ID] 66883b8275769bb3e3614cc6e429d7b1
+
+@@ @@
+     {
+         $routes = \is_array($config['routes'] ?? null) ? $config['routes'] : [];
+
+-        $builder->setParameter('koh_indexnow.enabled', (bool) ($config['enabled'] ?? true));
++        $builder->setParameter('koh_indexnow.enabled', (bool) ($config['enabled'] ?? false));
+         $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+
+
+25) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:76    [M] Coalesce [ID] bfad882e02249db4560d78f459a08ad4
+
+@@ @@
+     {
+         $routes = \is_array($config['routes'] ?? null) ? $config['routes'] : [];
+
+-        $builder->setParameter('koh_indexnow.enabled', (bool) ($config['enabled'] ?? true));
++        $builder->setParameter('koh_indexnow.enabled', (bool) (true ?? $config['enabled']));
+         $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+
+
+26) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:77    [M] Ternary [ID] d65e5eeb5fec7a9b927eeb3f136ecdc8
+
+@@ @@
+         $routes = \is_array($config['routes'] ?? null) ? $config['routes'] : [];
+
+         $builder->setParameter('koh_indexnow.enabled', (bool) ($config['enabled'] ?? true));
+-        $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
++        $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? '' : $config['key']);
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+         $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
+
+
+27) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:80    [M] TrueValue [ID] 3b53b7c299530d6c1ae4509808d835a1
+
+@@ @@
+         $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+-        $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
++        $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? false));
+         $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+
+
+28) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:80    [M] Coalesce [ID] 66c1e716363c0c4dc2de83733caff80f
+
+@@ @@
+         $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+-        $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
++        $builder->setParameter('koh_indexnow.include_homepage', (bool) (true ?? $config['include_homepage']));
+         $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+
+
+29) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:80    [M] MethodCallRemoval [ID] a9ca41eb36192719b1a430da7e46491c
+
+@@ @@
+         $builder->setParameter('koh_indexnow.key', \is_string($config['key'] ?? null) ? $config['key'] : '');
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+-        $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
++
+         $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+
+
+30) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:81    [M] TrueValue [ID] e83b2c1c558b9905cb390b2c730febb7
+
+@@ @@
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+         $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
+-        $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
++        $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? false));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+             'taxon' => \is_string($routes['taxon'] ?? null) ? $routes['taxon'] : 'sylius_shop_product_index',
+
+
+31) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:81    [M] Coalesce [ID] f9f586b3d2c5258f56908b6b3a74d947
+
+@@ @@
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+         $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
+-        $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
++        $builder->setParameter('koh_indexnow.include_main_taxon', (bool) (true ?? $config['include_main_taxon']));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+             'taxon' => \is_string($routes['taxon'] ?? null) ? $routes['taxon'] : 'sylius_shop_product_index',
+
+
+32) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:81    [M] MethodCallRemoval [ID] b0656e03b456c1394c40ce804eb10a0c
+
+@@ @@
+         $builder->setParameter('koh_indexnow.channels', self::strings($config['channels'] ?? []));
+         $builder->setParameter('koh_indexnow.denied_host_suffixes', self::strings($config['denied_host_suffixes'] ?? []));
+         $builder->setParameter('koh_indexnow.include_homepage', (bool) ($config['include_homepage'] ?? true));
+-        $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
++
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+             'taxon' => \is_string($routes['taxon'] ?? null) ? $routes['taxon'] : 'sylius_shop_product_index',
+
+
+33) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:84    [M] Ternary [ID] 8b57235a8c4a4505ae6d71046abf4d18
+
+@@ @@
+         $builder->setParameter('koh_indexnow.include_main_taxon', (bool) ($config['include_main_taxon'] ?? true));
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+-            'taxon' => \is_string($routes['taxon'] ?? null) ? $routes['taxon'] : 'sylius_shop_product_index',
++            'taxon' => \is_string($routes['taxon'] ?? null) ? 'sylius_shop_product_index' : $routes['taxon'],
+             'homepage' => \is_string($routes['homepage'] ?? null) ? $routes['homepage'] : 'sylius_shop_homepage',
+         ]);
+
+
+34) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:85    [M] Ternary [ID] dc6560887342dece11ebc689f85c61a0
+
+@@ @@
+         $builder->setParameter('koh_indexnow.routes', [
+             'product' => \is_string($routes['product'] ?? null) ? $routes['product'] : 'sylius_shop_product_show',
+             'taxon' => \is_string($routes['taxon'] ?? null) ? $routes['taxon'] : 'sylius_shop_product_index',
+-            'homepage' => \is_string($routes['homepage'] ?? null) ? $routes['homepage'] : 'sylius_shop_homepage',
++            'homepage' => \is_string($routes['homepage'] ?? null) ? 'sylius_shop_homepage' : $routes['homepage'],
+         ]);
+
+         $container->import('../config/services.php');
+
+
+35) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:94    [M] UnwrapArrayFilter [ID] 98482c30ea7a1a9f572f4f1f39f3f0fa
+
+@@ @@
+     /** @return list<string> */
+     private static function strings(mixed $values): array
+     {
+-        return \is_array($values) ? array_values(array_filter($values, \is_string(...))) : [];
++        return \is_array($values) ? array_values($values) : [];
+     }
+
+     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+
+
+36) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/KohIndexNowSyliusBundle.php:94    [M] UnwrapArrayValues [ID] eb680c4189e28996d23440019a7345ab
+
+@@ @@
+     /** @return list<string> */
+     private static function strings(mixed $values): array
+     {
+-        return \is_array($values) ? array_values(array_filter($values, \is_string(...))) : [];
++        return \is_array($values) ? array_filter($values, \is_string(...)) : [];
+     }
+
+     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+
+
+37) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/FullSubmission.php:40    [M] Continue_ [ID] 2942f4a75d6ea0cb092662f6900831a5
+
+@@ @@
+         $queued = [];
+         foreach ($this->urls->announcingChannels() as $host => $channel) {
+             if ($this->queue->isFullySubmitted($host)) {
+-                continue;
++                break;
+             }
+             $queued[$host] = $this->queueChannel($channel, $now);
+             $this->queue->markFullySubmitted($host, $now);
+
+
+38) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/FullSubmission.php:57    [M] ArrayItem [ID] 9e3075b3f2bc4dd0e83895a3bdbfdadd
+
+@@ @@
+         // their ids would cost more than the whole announcement.
+         foreach ($this->connection->fetchFirstColumn(
+             'SELECT product_id FROM sylius_product_channels WHERE channel_id = :channel',
+-            ['channel' => $channel->getId()],
++            ['channel' > $channel->getId()],
+         ) as $id) {
+             if (is_numeric($id)) {
+                 $subjects[] = Subject::product((int) $id);
+
+
+39) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/FullSubmission.php:63    [M] Foreach_ [ID] 84de313ce9beff5753a6218510755498
+
+@@ @@
+                 $subjects[] = Subject::product((int) $id);
+             }
+         }
+-        foreach ($this->connection->fetchFirstColumn('SELECT id FROM sylius_taxon') as $id) {
++        foreach ([] as $id) {
+             if (is_numeric($id)) {
+                 $subjects[] = Subject::taxon((int) $id);
+             }
+
+
+40) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:45    [M] DecrementInteger [ID] 892cf0d82f08ec0dea185492db2cc33a
+
+@@ @@
+         private readonly LoggerInterface $logger,
+     ) {}
+
+-    public function process(RunReport $report, int $limit = 10000, ?int $now = null): void
++    public function process(RunReport $report, int $limit = 9999, ?int $now = null): void
+     {
+         $now ??= time();
+         $items = $this->queue->due($limit, $now);
+
+
+41) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:45    [M] IncrementInteger [ID] 194f5a02e7c100b8a866ba161c3bfbca
+
+@@ @@
+         private readonly LoggerInterface $logger,
+     ) {}
+
+-    public function process(RunReport $report, int $limit = 10000, ?int $now = null): void
++    public function process(RunReport $report, int $limit = 10001, ?int $now = null): void
+     {
+         $now ??= time();
+         $items = $this->queue->due($limit, $now);
+
+
+42) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:58    [M] Foreach_ [ID] 4b1d365805da212537813e4049d17a73
+
+@@ @@
+         $drop = [];
+         foreach ($items as $item) {
+             $resolved = UrlCollection::of($this->resolver->resolve($item->subject, $item->reason->isStrict()));
+-            foreach ($resolved->rejected() as $url => $reason) {
++            foreach ([] as $url => $reason) {
+                 $this->logger->warning('IndexNow: not announcing {url}: {reason}', ['url' => $url, 'reason' => $reason]);
+             }
+             foreach ($resolved->hosts() as $host) {
+
+
+43) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:67    [M] TrueValue [ID] e0671b634021c1c6ffce5585a809cdae
+
+@@ @@
+                 }
+                 $hostsByItem[$item->id][] = $host;
+                 foreach ($resolved->urlsFor($host) as $url) {
+-                    $urlsByHost[$host][$url] = true;
++                    $urlsByHost[$host][$url] = false;
+                 }
+             }
+             if (!isset($hostsByItem[$item->id])) {
+
+
+44) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:75    [M] Assignment [ID] b9ceecf22d3377151af3f2e522e62fa3
+
+@@ @@
+             }
+         }
+         $this->queue->remove($drop);
+-        $report->dropped += count($drop);
++        $report->dropped = count($drop);
+
+         /** @var array<string, Result|null> $outcomeByHost null: accepted */
+         $outcomeByHost = [];
+
+
+45) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:90    [M] LogicalOr [ID] ed068d70c6f10c9d21503c3f76645f29
+
+@@ @@
+     private function submit(RunReport $report, string $host, array $urls): ?Result
+     {
+         $activation = $this->gate->forHost($host);
+-        if ($activation->key === null || $activation->hostPolicy === null) {
++        if ($activation->key === null && $activation->hostPolicy === null) {
+             return null;
+         }
+
+
+46) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:107    [M] ArrayItemRemoval [ID] 484c7b954ace493c015187fbf2ba5d83
+
+@@ @@
+         $last = $results === [] ? null : $results[array_key_last($results)];
+         if ($last === null || ($last->isSuccess() && count($results) === count($submission->chunks()))) {
+             $report->submitted[$host] = ($report->submitted[$host] ?? 0) + count($urls);
+-            $this->logger->info('IndexNow: announced {count} URLs for {host}', ['count' => count($urls), 'host' => $host]);
++            $this->logger->info('IndexNow: announced {count} URLs for {host}', ['host' => $host]);
+
+             return null;
+         }
+
+
+47) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:107    [M] MethodCallRemoval [ID] b10b227f0498dcf28ff34be95659df59
+
+@@ @@
+         $last = $results === [] ? null : $results[array_key_last($results)];
+         if ($last === null || ($last->isSuccess() && count($results) === count($submission->chunks()))) {
+             $report->submitted[$host] = ($report->submitted[$host] ?? 0) + count($urls);
+-            $this->logger->info('IndexNow: announced {count} URLs for {host}', ['count' => count($urls), 'host' => $host]);
++
+
+             return null;
+         }
+
+
+48) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:115    [M] ArrayItemRemoval [ID] e055a1d2c3952427c463b751365b2e26
+
+@@ @@
+         $detail = self::describe($last);
+         if ($last->isRetryable()) {
+             $report->deferred[$host] = $detail;
+-            $this->logger->warning('IndexNow: {host} deferred: {detail}', ['host' => $host, 'detail' => $detail]);
++            $this->logger->warning('IndexNow: {host} deferred: {detail}', ['detail' => $detail]);
+         } else {
+             $report->failed[$host] = $detail;
+             $this->logger->error('IndexNow: {host} rejected {count} URLs, not retrying: {detail}', ['host' => $host, 'count' => count($urls), 'detail' => $detail]);
+
+
+49) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:115    [M] MethodCallRemoval [ID] f11e3aeaf62e037eb3a8448478d4c1c3
+
+@@ @@
+         $detail = self::describe($last);
+         if ($last->isRetryable()) {
+             $report->deferred[$host] = $detail;
+-            $this->logger->warning('IndexNow: {host} deferred: {detail}', ['host' => $host, 'detail' => $detail]);
++
+         } else {
+             $report->failed[$host] = $detail;
+             $this->logger->error('IndexNow: {host} rejected {count} URLs, not retrying: {detail}', ['host' => $host, 'count' => count($urls), 'detail' => $detail]);
+
+
+50) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:118    [M] MethodCallRemoval [ID] 71a6b04211a467c4b7e920f6c5400703
+
+@@ @@
+             $this->logger->warning('IndexNow: {host} deferred: {detail}', ['host' => $host, 'detail' => $detail]);
+         } else {
+             $report->failed[$host] = $detail;
+-            $this->logger->error('IndexNow: {host} rejected {count} URLs, not retrying: {detail}', ['host' => $host, 'count' => count($urls), 'detail' => $detail]);
++
+         }
+
+         return $last;
+
+
+51) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:118    [M] ArrayItemRemoval [ID] 96a7c5717dc8f861f4f0511cbace5c30
+
+@@ @@
+             $this->logger->warning('IndexNow: {host} deferred: {detail}', ['host' => $host, 'detail' => $detail]);
+         } else {
+             $report->failed[$host] = $detail;
+-            $this->logger->error('IndexNow: {host} rejected {count} URLs, not retrying: {detail}', ['host' => $host, 'count' => count($urls), 'detail' => $detail]);
++            $this->logger->error('IndexNow: {host} rejected {count} URLs, not retrying: {detail}', ['count' => count($urls), 'detail' => $detail]);
+         }
+
+         return $last;
+
+
+52) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:134    [M] Continue_ [ID] 87d7d8139a4b029652a84fd1b22c4182
+
+@@ @@
+         $done = [];
+         foreach ($items as $item) {
+             if (!isset($hostsByItem[$item->id])) {
+-                continue;
++                break;
+             }
+             $retry = null;
+             foreach ($hostsByItem[$item->id] as $host) {
+
+
+53) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] Concat [ID] 3bfd589f2c5e983cea927b9ca61e102a
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => ':' . $item->subject->type . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+54) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] ConcatOperandRemoval [ID] dce65bab6eccf5d472d649bccaea0d7b
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+55) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] ConcatOperandRemoval [ID] 9228d94c3764984a916ebada24e7b5b1
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+56) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] Concat [ID] a0e1082fd5283550868324ad5e2ec862
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . $item->subject->id . ':', 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+57) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] ConcatOperandRemoval [ID] 9072e67cb7ee9bd3756aa5c334bc4c85
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':', 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+58) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] ArrayItemRemoval [ID] 78103586611e079b03f1c7006835e251
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+59) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:151    [M] MethodCallRemoval [ID] 0a33c5a775e3f81ccffbbce039a8dd5f
+
+@@ @@
+             $attempts = $item->attempts + 1;
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+-                $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
++
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+
+
+60) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:152    [M] Continue_ [ID] 762e46a9d6642226c9a8d4052b3b36b5
+
+@@ @@
+             if ($attempts >= self::MAX_ATTEMPTS) {
+                 $done[] = $item->id;
+                 $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+-                continue;
++                break;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+             $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 0));
+
+
+61) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:154    [M] DecrementInteger [ID] 7e2a5afe8ac9f1d756d1023dcbb997d0
+
+@@ @@
+                 $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+-            $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
++            $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 15));
+             $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 0));
+         }
+         $this->queue->remove($done);
+
+
+62) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:154    [M] IncrementInteger [ID] 33154c3f866ef5acde1d3b1e514e2091
+
+@@ @@
+                 $this->logger->error('IndexNow: {subject} given up after {max} attempts', ['subject' => $item->subject->type . ':' . $item->subject->id, 'max' => self::MAX_ATTEMPTS]);
+                 continue;
+             }
+-            $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
++            $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 17));
+             $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 0));
+         }
+         $this->queue->remove($done);
+
+
+63) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:155    [M] DecrementInteger [ID] e82540102fa41912c8a9d7bc22631ea0
+
+@@ @@
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+-            $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 0));
++            $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? -1));
+         }
+         $this->queue->remove($done);
+     }
+
+
+64) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:155    [M] IncrementInteger [ID] 3e6456e9d24b931f9bbfd2242f0922e7
+
+@@ @@
+                 continue;
+             }
+             $backoff = min(self::MAX_BACKOFF, self::BASE_BACKOFF << min($item->attempts, 16));
+-            $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 0));
++            $this->queue->defer($item->id, $attempts, $now + max($backoff, $retry->retryAfterSeconds ?? 1));
+         }
+         $this->queue->remove($done);
+     }
+
+
+65) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Processor.php:162    [M] UnwrapTrim [ID] 05c13aa2624aa4f6b25329ccc079743a
+
+@@ @@
+
+     private static function describe(Result $result): string
+     {
+-        return trim(sprintf('%s%s %s', $result->outcome->value, $result->statusCode !== null ? ' (HTTP ' . $result->statusCode . ')' : '', $result->detail));
++        return sprintf('%s%s %s', $result->outcome->value, $result->statusCode !== null ? ' (HTTP ' . $result->statusCode . ')' : '', $result->detail);
+     }
+ }
+
+
+66) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:23    [M] DecrementInteger [ID] 325242a2b1c2f067c313f552f6b4f175
+
+@@ @@
+         private readonly ?LockFactory $locks = null,
+     ) {}
+
+-    public function run(int $limit = 10000, ?int $now = null): ?RunReport
++    public function run(int $limit = 9999, ?int $now = null): ?RunReport
+     {
+         $lock = $this->locks?->createLock('koh_indexnow_run', 900);
+         if ($lock !== null && !$lock->acquire()) {
+
+
+67) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:23    [M] IncrementInteger [ID] 869ba78bd49b3cd6186f2a8b500b5beb
+
+@@ @@
+         private readonly ?LockFactory $locks = null,
+     ) {}
+
+-    public function run(int $limit = 10000, ?int $now = null): ?RunReport
++    public function run(int $limit = 10001, ?int $now = null): ?RunReport
+     {
+         $lock = $this->locks?->createLock('koh_indexnow_run', 900);
+         if ($lock !== null && !$lock->acquire()) {
+
+
+68) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:25    [M] DecrementInteger [ID] 47961c37f7fd5d01ef3f17282db02b40
+
+@@ @@
+
+     public function run(int $limit = 10000, ?int $now = null): ?RunReport
+     {
+-        $lock = $this->locks?->createLock('koh_indexnow_run', 900);
++        $lock = $this->locks?->createLock('koh_indexnow_run', 899);
+         if ($lock !== null && !$lock->acquire()) {
+             return null;
+         }
+
+
+69) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:25    [M] IncrementInteger [ID] f511693d1854d4177018a54fe2aa71a1
+
+@@ @@
+
+     public function run(int $limit = 10000, ?int $now = null): ?RunReport
+     {
+-        $lock = $this->locks?->createLock('koh_indexnow_run', 900);
++        $lock = $this->locks?->createLock('koh_indexnow_run', 901);
+         if ($lock !== null && !$lock->acquire()) {
+             return null;
+         }
+
+
+70) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:25    [M] NullSafeMethodCall [ID] 395a924d5bc74282c93509d182c92df9
+
+@@ @@
+
+     public function run(int $limit = 10000, ?int $now = null): ?RunReport
+     {
+-        $lock = $this->locks?->createLock('koh_indexnow_run', 900);
++        $lock = $this->locks->createLock('koh_indexnow_run', 900);
+         if ($lock !== null && !$lock->acquire()) {
+             return null;
+         }
+
+
+71) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:30    [M] MethodCallRemoval [ID] 0197d7e05c68732d2f5c3e3704ff8842
+
+@@ @@
+             return null;
+         }
+
+-        $this->gate->reset();
++
+         try {
+             $report = new RunReport();
+             $report->fullSubmissions = $this->fullSubmission->queuePending($now);
+
+
+72) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:31    [M] UnwrapFinally [ID] a1758a1f2da9c2e7a9f0059a6bba2206
+
+@@ @@
+         }
+
+         $this->gate->reset();
+-        try {
+-            $report = new RunReport();
+-            $report->fullSubmissions = $this->fullSubmission->queuePending($now);
+-            $this->processor->process($report, $limit, $now);
+-
+-            return $report;
+-        } finally {
+-            $lock?->release();
+-        }
++        $report = new RunReport();
++        $report->fullSubmissions = $this->fullSubmission->queuePending($now);
++        $this->processor->process($report, $limit, $now);
++        return $report;
++        $lock?->release();
+     }
+ }
+
+
+73) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:38    [M] NullSafeMethodCall [ID] 026d9ea7ffd8173a04d9224b278957b4
+
+@@ @@
+
+             return $report;
+         } finally {
+-            $lock?->release();
++            $lock->release();
+         }
+     }
+ }
+
+
+74) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Processing/Runner.php:38    [M] MethodCallRemoval [ID] 10d609873084fb3845845f8c558158bc
+
+@@ @@
+
+             return $report;
+         } finally {
+-            $lock?->release();
++
+         }
+     }
+ }
+
+
+75) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:35    [M] AssignCoalesce [ID] cb48dccef7ed922d95e5b8996bcf95d7
+
+@@ @@
+      */
+     public function enqueue(iterable $subjects, Reason $reason, ?int $now = null): int
+     {
+-        $now ??= time();
++        $now = time();
+         $unique = [];
+         foreach ($subjects as $subject) {
+             $unique[$subject->key()] = $subject;
+
+
+76) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:48    [M] LogicalAnd [ID] 77d44accf0e00286dd7724e42375586e
+
+@@ @@
+                 if (isset($existing[$key])) {
+                     // A change outranks a queued go-live entry, whose strict
+                     // rules would drop a product that was just disabled.
+-                    if (!$reason->isStrict() && $existing[$key] === Reason::Full->value) {
++                    if (!$reason->isStrict() || $existing[$key] === Reason::Full->value) {
+                         $this->connection->update(Tables::QUEUE, ['reason' => $reason->value], ['dedupe_key' => $key]);
+                     }
+                     continue;
+
+
+77) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:54    [M] CastInt [ID] c31a707e5b5e4951dcb9c06aa6389ac0
+
+@@ @@
+                     continue;
+                 }
+                 try {
+-                    $added += (int) $this->connection->insert(Tables::QUEUE, [
++                    $added += $this->connection->insert(Tables::QUEUE, [
+                         'subject' => $subject->type,
+                         'subject_id' => $subject->id,
+                         'url' => $subject->url,
+
+
+78) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:61    [M] DecrementInteger [ID] 81324f31b1982b5e7b826ad581391351
+
+@@ @@
+                         'dedupe_key' => $key,
+                         'reason' => $reason->value,
+                         'attempts' => 0,
+-                        'not_before' => 0,
++                        'not_before' => -1,
+                         'created_at' => $now,
+                     ]);
+                 } catch (UniqueConstraintViolationException) {
+
+
+79) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:86    [M] DecrementInteger [ID] 7900c27222521d61d932b21f2c99375d
+
+@@ @@
+             ->where('not_before <= :now')
+             ->setParameter('now', $now ?? time(), ParameterType::INTEGER)
+             ->orderBy('id')
+-            ->setMaxResults(max(1, $limit))
++            ->setMaxResults(max(0, $limit))
+             ->executeQuery()
+             ->fetchAllAssociative();
+
+
+80) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:86    [M] IncrementInteger [ID] 880e7fee6b0584e1be47488d719a6d9b
+
+@@ @@
+             ->where('not_before <= :now')
+             ->setParameter('now', $now ?? time(), ParameterType::INTEGER)
+             ->orderBy('id')
+-            ->setMaxResults(max(1, $limit))
++            ->setMaxResults(max(2, $limit))
+             ->executeQuery()
+             ->fetchAllAssociative();
+
+
+81) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:151    [M] Coalesce [ID] d1f11a48f2867dc9c76a30d1d407f362
+
+@@ @@
+     public function markFullySubmitted(string $host, ?int $now = null): void
+     {
+         try {
+-            $this->connection->insert(Tables::HOST, ['host' => $host, 'full_submitted_at' => $now ?? time()]);
++            $this->connection->insert(Tables::HOST, ['host' => $host, 'full_submitted_at' => time() ?? $now]);
+         } catch (UniqueConstraintViolationException) {
+             $this->connection->update(Tables::HOST, ['full_submitted_at' => $now ?? time()], ['host' => $host]);
+         }
+
+
+82) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:153    [M] Coalesce [ID] 40477a1a02e413baeec8fa9e7d2f0df0
+
+@@ @@
+         try {
+             $this->connection->insert(Tables::HOST, ['host' => $host, 'full_submitted_at' => $now ?? time()]);
+         } catch (UniqueConstraintViolationException) {
+-            $this->connection->update(Tables::HOST, ['full_submitted_at' => $now ?? time()], ['host' => $host]);
++            $this->connection->update(Tables::HOST, ['full_submitted_at' => time() ?? $now], ['host' => $host]);
+         }
+     }
+
+
+83) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:153    [M] MethodCallRemoval [ID] 83b219d5a2d994623013f7724ef32d47
+
+@@ @@
+         try {
+             $this->connection->insert(Tables::HOST, ['host' => $host, 'full_submitted_at' => $now ?? time()]);
+         } catch (UniqueConstraintViolationException) {
+-            $this->connection->update(Tables::HOST, ['full_submitted_at' => $now ?? time()], ['host' => $host]);
++
+         }
+     }
+
+
+84) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:165    [M] ConcatOperandRemoval [ID] 8637f7e2985387a32b4fa5cc48ee1e57
+
+@@ @@
+     private function existingReasons(array $keys): array
+     {
+         $rows = $this->connection->fetchAllAssociative(
+-            'SELECT dedupe_key, reason FROM ' . Tables::QUEUE . ' WHERE dedupe_key IN (:keys)',
++            'SELECT dedupe_key, reason FROM ' . Tables::QUEUE,
+             ['keys' => $keys],
+             ['keys' => ArrayParameterType::STRING],
+         );
+
+
+85) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:175    [M] ArrayOneItem [ID] d30b9711a183071e9be7953288758888
+
+@@ @@
+             $existing[self::string($row, 'dedupe_key')] = self::string($row, 'reason');
+         }
+
+-        return $existing;
++        return count($existing) > 1 ? array_slice($existing, 0, 1, true) : $existing;
+     }
+
+     /** @param array<array-key, mixed> $row */
+
+
+86) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:183    [M] CastInt [ID] bca360e43c1fb951cd05bc6dbee923dd
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
++        return is_int($value) ? $value : (is_numeric($value) ? $value : 0);
+     }
+
+     /** @param array<array-key, mixed> $row */
+
+
+87) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:183    [M] DecrementInteger [ID] 81af9efc106458b1702ed1569241aa67
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
++        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : -1);
+     }
+
+     /** @param array<array-key, mixed> $row */
+
+
+88) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:183    [M] IncrementInteger [ID] 9744c8908d4221a9395c4fc4e8a8b023
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
++        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 1);
+     }
+
+     /** @param array<array-key, mixed> $row */
+
+
+89) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:183    [M] Ternary [ID] 51782c85b01b45cc424987c1afdd588a
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0);
++        return is_int($value) ? $value : (is_numeric($value) ? 0 : (int) $value);
+     }
+
+     /** @param array<array-key, mixed> $row */
+
+
+90) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:191    [M] CastString [ID] 8e59b32aaea27b14423c016705e51e42
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_string($value) ? $value : (is_scalar($value) ? (string) $value : '');
++        return is_string($value) ? $value : (is_scalar($value) ? $value : '');
+     }
+ }
+
+
+91) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:191    [M] Ternary [ID] fd83cb152d21f3ff1a900434149cbd49
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_string($value) ? $value : (is_scalar($value) ? (string) $value : '');
++        return is_string($value) ? $value : (is_scalar($value) ? '' : (string) $value);
+     }
+ }
+
+
+92) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/QueueStore.php:191    [M] Ternary [ID] 44011aa28db6a0acf4cdf8c6dc44bfba
+
+@@ @@
+     {
+         $value = $row[$field] ?? null;
+
+-        return is_string($value) ? $value : (is_scalar($value) ? (string) $value : '');
++        return is_string($value) ? is_scalar($value) ? (string) $value : '' : $value;
+     }
+ }
+
+
+93) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] Concat [ID] 4a4f875892866d003122ccde57a69c49
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1('|' . $this->type . $this->id . '|' . $this->url);
+     }
+ }
+
+
+94) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] ConcatOperandRemoval [ID] 5c5fe2a2b492c6027470335575b3eb0e
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1($this->type . $this->id . '|' . $this->url);
+     }
+ }
+
+
+95) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] Concat [ID] 6063e0ec1ae26ef8237c1b6e79f4a381
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1($this->type . $this->id . '|' . '|' . $this->url);
+     }
+ }
+
+
+96) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] Concat [ID] 6162f35f4c70ad168d858d56bfedf541
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1($this->type . '|' . '|' . $this->id . $this->url);
+     }
+ }
+
+
+97) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] ConcatOperandRemoval [ID] ee0bac407c31cc4f27c986ef6f005ad0
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1($this->type . '|' . $this->id . $this->url);
+     }
+ }
+
+
+98) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Subject.php:58    [M] Concat [ID] 5719e358be6b9d977ef26dc093ee8659
+
+@@ @@
+
+     public function key(): string
+     {
+-        return sha1($this->type . '|' . $this->id . '|' . $this->url);
++        return sha1($this->type . '|' . $this->id . $this->url . '|');
+     }
+ }
+
+
+99) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:29    [M] TrueValue [ID] b51be9d126fe185152b66831739ae564
+
+@@ @@
+     {
+         if (!$schema->hasTable(self::QUEUE)) {
+             $queue = $schema->createTable(self::QUEUE);
+-            $queue->addColumn('id', Types::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
++            $queue->addColumn('id', Types::INTEGER, ['unsigned' => false, 'autoincrement' => true]);
+             $queue->addColumn('subject', Types::STRING, ['length' => 16]);
+             $queue->addColumn('subject_id', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
+             $queue->addColumn('url', Types::STRING, ['length' => 2048, 'default' => '']);
+
+
+100) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:29    [M] ArrayItemRemoval [ID] f4a6e72a1757bab55d20a7b9726da307
+
+@@ @@
+     {
+         if (!$schema->hasTable(self::QUEUE)) {
+             $queue = $schema->createTable(self::QUEUE);
+-            $queue->addColumn('id', Types::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
++            $queue->addColumn('id', Types::INTEGER, ['autoincrement' => true]);
+             $queue->addColumn('subject', Types::STRING, ['length' => 16]);
+             $queue->addColumn('subject_id', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
+             $queue->addColumn('url', Types::STRING, ['length' => 2048, 'default' => '']);
+
+
+101) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:46    [M] TrueValue [ID] f43255d6c0172b38cc7cda3648eaa2f6
+
+@@ @@
+         if (!$schema->hasTable(self::HOST)) {
+             $host = $schema->createTable(self::HOST);
+             $host->addColumn('host', Types::STRING, ['length' => 253]);
+-            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
++            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => false, 'default' => 0]);
+             $host->setPrimaryKey(['host']);
+         }
+     }
+
+
+102) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:46    [M] DecrementInteger [ID] 7af18918bd91a7ea36f53e696c63f16d
+
+@@ @@
+         if (!$schema->hasTable(self::HOST)) {
+             $host = $schema->createTable(self::HOST);
+             $host->addColumn('host', Types::STRING, ['length' => 253]);
+-            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
++            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => -1]);
+             $host->setPrimaryKey(['host']);
+         }
+     }
+
+
+103) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:46    [M] IncrementInteger [ID] b829e65d4f01e685e5c72f243f5ee2e1
+
+@@ @@
+         if (!$schema->hasTable(self::HOST)) {
+             $host = $schema->createTable(self::HOST);
+             $host->addColumn('host', Types::STRING, ['length' => 253]);
+-            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
++            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => 1]);
+             $host->setPrimaryKey(['host']);
+         }
+     }
+
+
+104) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Queue/Tables.php:46    [M] ArrayItemRemoval [ID] 12165a6744fc3fea256aea545c8575dc
+
+@@ @@
+         if (!$schema->hasTable(self::HOST)) {
+             $host = $schema->createTable(self::HOST);
+             $host->addColumn('host', Types::STRING, ['length' => 253]);
+-            $host->addColumn('full_submitted_at', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
++            $host->addColumn('full_submitted_at', Types::INTEGER, ['default' => 0]);
+             $host->setPrimaryKey(['host']);
+         }
+     }
+
+
+105) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:45    [M] TrueValue [ID] 6b201a7e324644fb6dd6a03c75db6cb3
+
+@@ @@
+         private readonly ObjectRepository $products,
+         private readonly ObjectRepository $taxons,
+         private readonly array $routes,
+-        private readonly bool $includeMainTaxon = true,
++        private readonly bool $includeMainTaxon = false,
+     ) {}
+
+     /** @return list<string> */
+
+
+106) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:51    [M] MatchArmRemoval [ID] 34ed0e7348bd268596ad407021e09b6e
+
+@@ @@
+             Subject::HOMEPAGE => $this->homepages(),
+             Subject::PRODUCT => ($product = $this->products->find($subject->id)) instanceof ProductInterface ? $this->forProduct($product, $strict) : [],
+             Subject::TAXON => ($taxon = $this->taxons->find($subject->id)) instanceof TaxonInterface ? $this->forTaxon($taxon, $strict) : [],
+-            default => [],
+         };
+     }
+
+
+107) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:61    [M] FalseValue [ID] a99d0d86210d1eab73051dd878884cab
+
+@@ @@
+     }
+
+     /** @return list<string> */
+-    public function forProduct(ProductInterface $product, bool $strict = false): array
++    public function forProduct(ProductInterface $product, bool $strict = true): array
+     {
+         if ($strict && !$product->isEnabled()) {
+             return [];
+
+
+108) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:82    [M] SpreadOneItem [ID] 63b977998e1f3a7983852485b9c5dc54
+
+@@ @@
+
+         $mainTaxon = $product->getMainTaxon();
+         if (!$strict && $this->includeMainTaxon && $mainTaxon instanceof TaxonInterface) {
+-            $urls = [...$urls, ...$this->forTaxon($mainTaxon)];
++            $urls = [[...$urls][0], ...$this->forTaxon($mainTaxon)];
+         }
+
+         return array_values(array_unique($urls));
+
+
+109) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:82    [M] SpreadOneItem [ID] f01b96e7a0383189578db913aa696402
+
+@@ @@
+
+         $mainTaxon = $product->getMainTaxon();
+         if (!$strict && $this->includeMainTaxon && $mainTaxon instanceof TaxonInterface) {
+-            $urls = [...$urls, ...$this->forTaxon($mainTaxon)];
++            $urls = [...$urls, [...$this->forTaxon($mainTaxon)][0]];
+         }
+
+         return array_values(array_unique($urls));
+
+
+110) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:85    [M] UnwrapArrayUnique [ID] 1f9db50bc9fa4adca9b6f86da2ff8f9c
+
+@@ @@
+             $urls = [...$urls, ...$this->forTaxon($mainTaxon)];
+         }
+
+-        return array_values(array_unique($urls));
++        return array_values($urls);
+     }
+
+     /** @return list<string> */
+
+
+111) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:85    [M] UnwrapArrayValues [ID] d69d687d0f43c6f309dd858e49369942
+
+@@ @@
+             $urls = [...$urls, ...$this->forTaxon($mainTaxon)];
+         }
+
+-        return array_values(array_unique($urls));
++        return array_unique($urls);
+     }
+
+     /** @return list<string> */
+
+
+112) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:89    [M] FalseValue [ID] 9260367fb443abfde47509d38a18d80e
+
+@@ @@
+     }
+
+     /** @return list<string> */
+-    public function forTaxon(TaxonInterface $taxon, bool $strict = false): array
++    public function forTaxon(TaxonInterface $taxon, bool $strict = true): array
+     {
+         if ($strict && !$taxon->isEnabled()) {
+             return [];
+
+
+113) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:98    [M] Continue_ [ID] 234d88880a068585b1faae2218cd3c2e
+
+@@ @@
+         $urls = [];
+         foreach ($this->announcingChannels() as $host => $channel) {
+             if (!self::isInMenu($taxon, $channel)) {
+-                continue;
++                break;
+             }
+             foreach (self::localeCodes($channel) as $locale) {
+                 $slug = self::taxonSlug($taxon, $locale);
+
+
+114) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:108    [M] ArrayOneItem [ID] 65bac2717dea973e2b20e8b84f42cd3c
+
+@@ @@
+             }
+         }
+
+-        return $urls;
++        return count($urls) > 1 ? array_slice($urls, 0, 1, true) : $urls;
+     }
+
+     /** @return list<string> */
+
+
+115) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:112    [M] PublicVisibility [ID] d1483e649b0a1ac528aa86de4ea28523
+
+@@ @@
+     }
+
+     /** @return list<string> */
+-    public function homepages(): array
++    protected function homepages(): array
+     {
+         $urls = [];
+         foreach ($this->announcingChannels() as $host => $channel) {
+
+
+116) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:157    [M] LogicalAnd [ID] 37e4d366200c3c9fc42840eb83127a82
+
+@@ @@
+         $codes = [];
+         foreach ($channel->getLocales() as $locale) {
+             $code = $locale->getCode();
+-            if (is_string($code) && $code !== '') {
++            if (is_string($code) || $code !== '') {
+                 $codes[] = $code;
+             }
+         }
+
+
+117) /Volumes/Samsung_X5/Projects/koh-sylius-indexnow/src/Url/UrlResolver.php:219    [M] TrueValue [ID] f9c163d722ccaf460c726c3fe38a48a5
+
+@@ @@
+         }
+         $seen = [];
+         while (($parent = $taxon->getParent()) instanceof BaseTaxonInterface && !isset($seen[spl_object_id($parent)])) {
+-            $seen[spl_object_id($parent)] = true;
++            $seen[spl_object_id($parent)] = false;
+             $taxon = $parent;
+         }
+
+
+Timed Out mutants:
+==================
+
+Skipped mutants:
+================

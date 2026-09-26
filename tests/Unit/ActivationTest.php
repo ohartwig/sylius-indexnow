@@ -97,6 +97,8 @@ final class ActivationTest extends TestCase
         self::assertSame($key, $response->getContent());
         self::assertSame('text/plain; charset=utf-8', $response->headers->get('Content-Type'));
         self::assertSame('noindex', $response->headers->get('X-Robots-Tag'));
+        self::assertTrue($response->headers->hasCacheControlDirective('public'));
+        self::assertSame('3600', $response->headers->getCacheControlDirective('max-age'));
 
         $this->expectException(NotFoundHttpException::class);
         $controller(Request::create('https://shop-domain.de/abcdef123456.txt'), 'abcdef123456');

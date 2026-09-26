@@ -16,10 +16,12 @@ use Koh\IndexNow\Sylius\Change\DoctrineChangeListener;
 use Koh\IndexNow\Sylius\Queue\QueueStore;
 use Koh\IndexNow\Sylius\Queue\Subject;
 use Koh\IndexNow\Sylius\Tests\Support\Shop;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Sylius\Component\Core\Model\ChannelPricing;
+use Sylius\Component\Core\Model\ProductImage;
 use Sylius\Component\Core\Model\ProductTaxon;
 use Sylius\Component\Core\Model\ProductVariant;
 
@@ -112,5 +114,79 @@ final class ChangeListenerTest extends TestCase
     private function args(object $object): LifecycleEventArgs
     {
         return new LifecycleEventArgs($object, $this->createStub(ObjectManager::class));
+    }
+
+    /** @return iterable<string, array{string, list<string>}> */
+    public static function changedParts(): iterable
+    {
+        yield 'the product itself' => ['product', ['product:10']];
+        yield 'its translation' => ['translation', ['product:10']];
+        yield 'a variant' => ['variant', ['product:10']];
+        yield 'a price' => ['price', ['product:10']];
+        yield 'a price whose variant is gone' => ['orphan price', []];
+        yield 'an image' => ['image', ['product:10']];
+        yield 'a taxon assignment' => ['assignment', ['product:10', 'taxon:5']];
+        yield 'a taxon' => ['taxon', ['taxon:5']];
+        yield 'a taxon translation' => ['taxon translation', ['taxon:5']];
+        yield 'anything else' => ['other', []];
+    }
+
+    /** @param list<string> $expected */
+    #[Test]
+    #[DataProvider('changedParts')]
+    public function eachChangedPartMapsToItsPage(string $part, array $expected): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+        $taxon = $this->shop->taxon(5, ['de_DE' => 'zigarren']);
+        $variant = new ProductVariant();
+        $variant->setProduct($product);
+
+        $changed = match ($part) {
+            'product' => $product,
+            'translation' => $product->getTranslation('de_DE'),
+            'variant' => $variant,
+            'price' => (static function () use ($variant): ChannelPricing { $p = new ChannelPricing(); $p->setProductVariant($variant); return $p; })(),
+            'orphan price' => new ChannelPricing(),
+            'image' => (static function () use ($product): ProductImage { $i = new ProductImage(); $i->setOwner($product); return $i; })(),
+            'assignment' => (static function () use ($product, $taxon): ProductTaxon { $a = new ProductTaxon(); $a->setProduct($product); $a->setTaxon($taxon); return $a; })(),
+            'taxon' => $taxon,
+            'taxon translation' => $taxon->getTranslation('de_DE'),
+            default => new \stdClass(),
+        };
+
+        $part === 'product' ? $this->listener->postPersist($this->args($changed)) : $this->listener->postUpdate($this->args($changed));
+        $this->listener->postFlush(new PostFlushEventArgs($this->createStub(EntityManagerInterface::class)));
+
+        $queued = [];
+        foreach ($this->queue->due(10) as $item) {
+            $subject = $item->subject;
+            $queued[] = sprintf('%s:%d', $subject->type, $subject->id);
+        }
+        sort($queued);
+        self::assertSame($expected, $queued);
+    }
+
+    #[Test]
+    public function aRemovedTaxonIsResolvedToItsUrlAndOtherRemovalsToTheirOwner(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+        $variant = new ProductVariant();
+        $variant->setProduct($product);
+
+        $this->listener->preRemove($this->args($this->shop->taxon(5, ['de_DE' => 'zigarren'])));
+        $this->listener->preRemove($this->args($variant));
+        $this->listener->postFlush(new PostFlushEventArgs($this->createStub(EntityManagerInterface::class)));
+
+        $queued = [];
+        foreach ($this->queue->due(10) as $item) {
+            $subject = $item->subject;
+            $queued[] = $subject->type === Subject::URL ? $subject->url : sprintf('%s:%d', $subject->type, $subject->id);
+        }
+        sort($queued);
+        self::assertSame(['https://shop-domain.de/de_DE/taxons/zigarren', 'product:10'], $queued);
     }
 }
