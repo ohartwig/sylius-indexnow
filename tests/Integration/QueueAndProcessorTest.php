@@ -152,27 +152,37 @@ final class QueueAndProcessorTest extends TestCase
     }
 
     /** @param list<int> $statuses */
-    private function process(array $statuses, ?int $now = null, ?ChannelGate $gate = null): RunReport
+    private function processInto(RunReport $report, array $statuses): void
+    {
+        $this->process($statuses, null, null, [], $report);
+    }
+
+    /**
+     * @param list<int> $statuses
+     * @param array<string, string> $headers
+     */
+    private function process(array $statuses, ?int $now = null, ?ChannelGate $gate = null, array $headers = [], ?RunReport $report = null): RunReport
     {
         $gate ??= $this->shop->gate();
-        $http = new class ($statuses, $this->requests) implements ClientInterface {
+        $http = new class ($statuses, $headers, $this->requests) implements ClientInterface {
             /**
              * @param list<int> $statuses
+             * @param array<string, string> $headers
              * @param list<RequestInterface> $requests
              */
-            public function __construct(private array $statuses, public array &$requests) {}
+            public function __construct(private array $statuses, private readonly array $headers, public array &$requests) {}
 
             public function sendRequest(RequestInterface $request): ResponseInterface
             {
                 $this->requests[] = $request;
                 $status = count($this->statuses) > 1 ? array_shift($this->statuses) : $this->statuses[0];
 
-                return new Response($status);
+                return new Response($status, $this->headers);
             }
         };
         $factory = new HttpFactory();
 
-        $report = new RunReport();
+        $report ??= new RunReport();
         (new Processor(
             $this->queue,
             $this->shop->resolver($gate, false),
@@ -182,5 +192,52 @@ final class QueueAndProcessorTest extends TestCase
         ))->process($report, 100, $now);
 
         return $report;
+    }
+
+    #[Test]
+    public function backoffDoublesPerAttemptAndRetryAfterWinsWhenLonger(): void
+    {
+        $this->queue->enqueue([Subject::product(10)], Reason::Change, 1000);
+        $this->connection->executeStatement('UPDATE koh_indexnow_queue SET attempts = 3');
+
+        $report = $this->process([429], 1000);
+        self::assertStringContainsString('throttled (HTTP 429)', $report->deferred['shop-domain.de'] ?? '');
+        self::assertSame([], $this->queue->due(100, 1479), 'fourth attempt: 60 s << 3 = 480 s');
+        $item = $this->queue->due(100, 1480)[0] ?? null;
+        self::assertNotNull($item);
+        self::assertSame(4, $item->attempts);
+
+        $this->connection->executeStatement('UPDATE koh_indexnow_queue SET attempts = 0, not_before = 0');
+        $this->process([503], 2000, null, ['Retry-After' => '900']);
+        self::assertSame([], $this->queue->due(100, 2899), 'the engine asked for 900 s, more than the 60 s backoff');
+        self::assertCount(1, $this->queue->due(100, 2900));
+    }
+
+    #[Test]
+    public function theEighthFailedAttemptIsTheLast(): void
+    {
+        $this->queue->enqueue([Subject::product(10)], Reason::Change, 0);
+        $this->connection->executeStatement('UPDATE koh_indexnow_queue SET attempts = 6');
+        $this->process([429]);
+        self::assertSame(7, $this->queue->due(100, PHP_INT_MAX)[0]->attempts ?? null, 'seventh failure: still queued');
+
+        $this->connection->executeStatement('UPDATE koh_indexnow_queue SET not_before = 0');
+        $this->process([429]);
+        self::assertSame([], $this->queue->due(100, PHP_INT_MAX), 'eighth failure: given up');
+    }
+
+    #[Test]
+    public function reportCountersAddUpAcrossProcessCalls(): void
+    {
+        $report = new RunReport();
+        $this->queue->enqueue([Subject::product(10)], Reason::Change);
+        $this->processInto($report, [200]);
+        $this->queue->enqueue([Subject::taxon(999)], Reason::Change);
+        $this->queue->enqueue([Subject::product(10)], Reason::Change);
+        $this->processInto($report, [200]);
+
+        self::assertSame(3, $report->processed);
+        self::assertSame(1, $report->dropped, 'the unknown taxon resolves to nothing');
+        self::assertSame(2, $report->submitted['shop-domain.de'] ?? null);
     }
 }

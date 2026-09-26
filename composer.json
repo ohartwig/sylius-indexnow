@@ -26,20 +26,24 @@
         "doctrine/dbal": "^3.8 || ^4.0",
         "doctrine/migrations": "^3.7",
         "doctrine/orm": "^2.18 || ^3.0",
+        "doctrine/persistence": "^3.3 || ^4.0",
         "guzzlehttp/psr7": "^2.12.3",
         "koh/indexnow": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0",
         "psr/log": "^2.0 || ^3.0",
         "sylius/sylius": "^2.0.18",
         "symfony/config": "^7.4 || ^8.0",
         "symfony/console": "^7.4 || ^8.0",
         "symfony/dependency-injection": "^7.4 || ^8.0",
         "symfony/http-client": "^7.4 || ^8.0",
+        "symfony/http-client-contracts": "^3.4",
         "symfony/http-foundation": "^7.4 || ^8.0",
         "symfony/http-kernel": "^7.4 || ^8.0",
         "symfony/lock": "^7.4 || ^8.0",
         "symfony/routing": "^7.4 || ^8.0"
     },
     "require-dev": {
+        "infection/infection": "^0.35.4",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.5 || ^12.0 || ^13.0"
     },
@@ -53,6 +57,15 @@
             "Koh\\IndexNow\\Sylius\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://git.ole-hartwig.eu/api/v4/group/1091/-/packages/composer/packages.json",
+            "only": [
+                "koh/*"
+            ]
+        }
+    ],
     "extra": {
         "branch-alias": {
             "dev-main": "1.0-dev"
@@ -63,7 +76,8 @@
         "allow-plugins": {
             "php-http/discovery": false,
             "symfony/flex": false,
-            "symfony/runtime": false
+            "symfony/runtime": false,
+            "infection/extension-installer": true
         }
     }
 }
