@@ -2,6 +2,16 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.8](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.7...v1.0.8) (2026-09-28)
+
+### :repeat: Continuous Integrations
+
+* **deps:** update dependency devops/ci-cd-components/composed-default-pipelines to v2.21.3 ([db41760](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/db417604495386cb62364ed4dc3c7d542254f612))
+
+### :repeat: Chores
+
+* **repo-templates:** sync ([9ba9dca](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/9ba9dcab840c73b51e349d5834bbee8a75073050))
+
 ## [1.0.7](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.6...v1.0.7) (2026-09-28)
 
 ### :repeat: Continuous Integrations
