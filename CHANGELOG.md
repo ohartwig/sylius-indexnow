@@ -2,6 +2,16 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.5](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.4...v1.0.5) (2026-09-28)
+
+### :repeat: Chores
+
+* **repo-templates:** sync ([590a5a5](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/590a5a5cc59a23b7f4bb75f0add5db8b4ab1adb6))
+* **deps:** update dependency mstruebing/editorconfig-checker to v3.11.3 ([42cc314](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/42cc314bf9ac5fb8b091ab1c2a6e2443bb7b160b))
+* **repo-templates:** sync ([3ae4a81](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/3ae4a812fd491407a67f74f40717c7126e3c44d6))
+* **deps:** update dependency mstruebing/editorconfig-checker to v3.11.3 ([b1efd68](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/b1efd6810121541e8756f9ca1b063a1e78ba159f))
+* **repo-templates:** sync ([0435131](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/04351312bcd5d28c313123c707d969e333299b1a))
+
 ## [1.0.4](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.3...v1.0.4) (2026-09-26)
 
 ### :bug: Fixes
