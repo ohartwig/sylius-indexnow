@@ -2,6 +2,19 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.11](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.10...v1.0.11) (2026-10-03)
+
+### :repeat: Continuous Integrations
+
+* follow composed-default-pipelines on the rolling major tag ([3e3f3e3](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/3e3f3e3f880b882c203a0a80b2669a2cf4fea516))
+* **deps:** update dependency devops/ci-cd-components/composed-default-pipelines to v2.21.19 ([28f110f](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/28f110f069b0f416f5f3e860db9f2721f13e9987))
+* **deps:** update dependency devops/ci-cd-components/composed-default-pipelines to v2.21.18 ([592108b](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/592108b2cc0601de1d61c606da132832f094425a))
+* **deps:** update dependency devops/ci-cd-components/composed-default-pipelines to v2.21.17 ([7f4ce19](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/7f4ce1996d6d0b70cfb0b08692fd959a02f68093))
+
+### :repeat: Chores
+
+* **deps:** update dependency infection/infection to ^0.35.6 ([9cd321f](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/9cd321fb25f7037a8e663d457ba6e5c2a913473b))
+
 ## [1.0.10](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.9...v1.0.10) (2026-09-30)
 
 ### :bug: Fixes
