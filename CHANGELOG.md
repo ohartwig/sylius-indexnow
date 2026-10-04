@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.12](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.11...v1.0.12) (2026-10-04)
+
+### :bug: Fixes
+
+* **deps:** accept Sylius 2.2.9 again ([bff407d](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/bff407d8c852c3ec232e5c0b38988d603ae8fd73))
+
 ## [1.0.11](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.10...v1.0.11) (2026-10-03)
 
 ### :repeat: Continuous Integrations
