@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>devops/renovate-runner:default.json"
+  ],
+  "packageRules": [
+    {
+      "description": "sylius/sylius keeps its lower bound at 2.2.9. Consumers on Sylius 2.2 (commerce, held there because sylius/paypal-plugin has no release for 2.3) must be able to install this package; a pinup range bump to ^2.3.0 locked them out of every later release. widen appends new majors/minors instead of raising the floor. Remove when every consumer runs Sylius 2.3 or later.",
+      "matchPackageNames": [
+        "sylius/sylius"
+      ],
+      "rangeStrategy": "widen"
+    }
+  ]
+}
