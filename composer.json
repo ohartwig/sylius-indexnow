@@ -24,7 +24,7 @@
     "require": {
         "php": "^8.5.11",
         "doctrine/dbal": "^3.8 || ^4.0",
-        "doctrine/migrations": "^3.9.7",
+        "doctrine/migrations": "^3.9.8",
         "doctrine/orm": "^2.18 || ^3.0",
         "doctrine/persistence": "^3.3 || ^4.0",
         "guzzlehttp/psr7": "^2.13.1",
