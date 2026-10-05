@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.15](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.14...v1.0.15) (2026-10-05)
+
+### :repeat: Chores
+
+* **deps:** update dependency phpstan/phpstan to ^2.2.17 ([6a0bc9b](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/6a0bc9b04a648c07c0b8bb825619d4aa59c2e721))
+
 ## [1.0.14](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.13...v1.0.14) (2026-10-05)
 
 ### :bug: Fixes
