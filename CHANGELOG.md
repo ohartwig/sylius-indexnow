@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.14](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.13...v1.0.14) (2026-10-05)
+
+### :bug: Fixes
+
+* **deps:** update dependency doctrine/migrations to ^3.9.8 ([afb4b31](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/afb4b3164ea9af2f9208018a88390cedd0bd7506))
+
 ## [1.0.13](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.12...v1.0.13) (2026-10-04)
 
 ### :repeat: Chores
