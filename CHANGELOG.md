@@ -2,6 +2,16 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.19](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.18...v1.0.19) (2026-10-13)
+
+### :repeat: Continuous Integrations
+
+* publish to GitHub through symfony-package-oss ([5a23942](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/5a23942d1a9e826909950bcffc48e151d4b6a426))
+
+### :repeat: Chores
+
+* **repo-templates:** sync ([d777478](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/d777478762a20109d6cbbeec8917740b2c2ebe4c))
+
 ## [1.0.18](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.17...v1.0.18) (2026-10-13)
 
 ### :repeat: Chores
