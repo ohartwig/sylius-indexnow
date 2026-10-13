@@ -5,29 +5,25 @@ SPDX-License-Identifier: MIT
 
 # Contributing
 
-Issues and merge requests are welcome.
+Thank you for considering a contribution. Issues and pull requests are welcome
+at <https://github.com/ohartwig/sylius-indexnow>.
 
-## Where to file things
+## How changes reach this repository
 
-Development happens on **GitLab**: <https://git.ole-hartwig.eu/ai-ready-platform/platform>.
-The GitHub repository is a read-only mirror — it exists so Packagist has a public
-remote to read. Issues and pull requests opened there will not be seen. Please
-use the GitLab issue tracker linked from `composer.json`.
+The GitHub repository is a read-only mirror. The source is maintained in a
+private GitLab instance, and every release is published to GitHub by CI: the
+history is rewritten to leave out files that only matter to that instance
+(CI configuration, agent notes, planning documents) and then force-pushed,
+together with the new release tag. Packagist picks the tag up from GitHub.
 
-## Developer Certificate of Origin
+A pull request is therefore not merged on GitHub. When a change is accepted,
+the maintainer applies it upstream with your authorship and sign-off intact,
+closes the pull request with a reference to it, and the change appears here
+with the next release. Please do not base long-lived work on the GitHub
+history: because it is rewritten, commit ids on GitHub are not stable across
+changes to the mirror configuration.
 
-Every commit must be signed off. By adding the line
-
-```text
-Signed-off-by: Your Name <your.email@example.com>
-```
-
-you certify the [Developer Certificate of Origin 1.1](https://developercertificate.org/):
-that you wrote the patch or have the right to submit it under the project's licence.
-
-`git commit -s` adds the line for you.
-
-## Before you open a merge request
+## Before you open a pull request
 
 ```bash
 composer install
@@ -45,18 +41,40 @@ Every source file carries an SPDX header:
 // SPDX-License-Identifier: MIT
 ```
 
-## What makes a good change here
+- New behaviour comes with a test, and changed behaviour is noted in the
+  README where it affects users.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+  (`fix: …`, `feat: …`, `docs: …`); the release version is derived from them.
+- Code, comments and documentation are written in English.
 
-This package is read by people trying to understand a protocol.
-A comment explaining **why** a decision was made is worth more than one restating
-what the line does — most of the non-obvious code here exists because the
-specification, the search engines and the framework disagreed, and the next reader needs to
-know which one won and why.
+Some development tooling is resolved from a private package registry, so a
+full `composer install` from a GitHub clone may not work yet. If that stops
+you from running a check, say so in the pull request; the upstream pipeline
+runs the full suite on every change.
 
-Add a test that pins the decision rather than the mechanism.
-`aRestrictedPageIsNeverAnnouncedNotEvenWhenItChanges` says something a future
-maintainer needs; `testProcessorReturnsReport` does not.
+## Developer Certificate of Origin
 
-## Reporting a vulnerability
+Every commit must be signed off, certifying the
+[Developer Certificate of Origin](https://developercertificate.org/):
 
-Do not open a public issue. See [SECURITY.md](SECURITY.md).
+```sh
+git commit -s
+```
+
+## Signed commits
+
+Commits must also carry a verifiable signature (SSH or GPG):
+
+```sh
+git config commit.gpgsign true
+```
+
+## Security
+
+Please do not report security problems in public issues; follow
+[SECURITY.md](SECURITY.md) instead.
+
+## Licence
+
+By contributing you agree that your contribution is licensed under the MIT
+License, like the rest of the repository.

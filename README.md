@@ -12,7 +12,7 @@ Naver, Yep and Amazon share among themselves. Bing's index is what ChatGPT
 search and Copilot read, so a new product can be found there the same day.
 
 For Sylius 2. Built on the framework-agnostic
-[koh/indexnow](https://github.com/ole-hartwig/indexnow).
+[koh/indexnow](https://github.com/ohartwig/indexnow).
 
 ## Install
 

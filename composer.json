@@ -18,8 +18,9 @@
     ],
     "homepage": "https://ole-hartwig.eu/open-source",
     "support": {
-        "issues": "https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/-/issues",
-        "source": "https://github.com/ole-hartwig/sylius-indexnow"
+        "issues": "https://github.com/ohartwig/sylius-indexnow/issues",
+        "source": "https://github.com/ohartwig/sylius-indexnow",
+        "security": "https://github.com/ohartwig/sylius-indexnow/blob/main/SECURITY.md"
     },
     "require": {
         "php": "^8.5.11",
