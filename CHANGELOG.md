@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.18](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.17...v1.0.18) (2026-10-13)
+
+### :repeat: Chores
+
+* publish to GitHub and Packagist ([a1e21b3](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/a1e21b3f8be2e0d009cc1348f3fb83a883233a7b))
+
 ## [1.0.17](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.16...v1.0.17) (2026-10-09)
 
 ### :repeat: Chores
