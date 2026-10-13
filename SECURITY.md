@@ -36,7 +36,7 @@ We commit to:
 | Coordinated disclosure window default | **90 days** after first response    |
 
 If you don't hear back within the first acknowledgement window, please
-escalate via <support@ole-hartwig.eu>.
+escalate via <mail@ole-hartwig.eu>.
 
 ## Coordinated disclosure
 
