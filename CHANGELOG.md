@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.21](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.20...v1.0.21) (2026-10-16)
+
+### :repeat: Chores
+
+* **repo-templates:** sync ([f21ee7a](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/f21ee7aaef5d0142b10013abe3deaa06265c0659))
+
 ## [1.0.20](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.19...v1.0.20) (2026-10-15)
 
 ### :repeat: Chores
