@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.22](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.21...v1.0.22) (2026-10-18)
+
+### :bug: Fixes
+
+* admit PHP 8.3 and test the floor on it ([b3656f5](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/b3656f55d56523021b755d0862db9a22c5fc04ed))
+
 ## [1.0.21](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.20...v1.0.21) (2026-10-16)
 
 ### :repeat: Chores
