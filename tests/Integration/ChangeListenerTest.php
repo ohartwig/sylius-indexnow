@@ -10,6 +10,7 @@ namespace Koh\IndexNow\Sylius\Tests\Integration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Persistence\ObjectManager;
 use Koh\IndexNow\Sylius\Change\DoctrineChangeListener;
@@ -108,6 +109,161 @@ final class ChangeListenerTest extends TestCase
 
         $listener->postFlush(new PostFlushEventArgs($this->createStub(EntityManagerInterface::class)));
         $this->addToAssertionCount(1);
+    }
+
+    #[Test]
+    public function aProductCreatedDisabledIsNotAnnounced(): void
+    {
+        // AUD-063-F01: drafts are created disabled (the admin, the shop's MCP
+        // server), and their slug went out on the first save.
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $taxon = $this->shop->taxon(5, ['de_DE' => 'zigarren']);
+        $product = $this->shop->product(11, ['de_DE' => 'neuheit'], [$de], enabled: false, mainTaxon: $taxon);
+
+        $this->listener->postPersist($this->args($product));
+        $this->flush();
+
+        self::assertSame([], $this->queued());
+    }
+
+    #[Test]
+    public function editingOrRemovingAProductThatWasNeverEnabledAnnouncesNothing(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(11, ['de_DE' => 'neuheit'], [$de], enabled: false);
+        $variant = new ProductVariant();
+        $variant->setProduct($product);
+
+        $this->listener->preUpdate($this->updateArgs($product, ['code' => ['P11', 'P11-NEU']]));
+        $this->listener->postUpdate($this->args($product));
+        $this->listener->postUpdate($this->args($product->getTranslation('de_DE')));
+        $this->listener->postPersist($this->args($variant));
+        $this->listener->preRemove($this->args($product));
+        $this->flush();
+
+        self::assertSame([], $this->queued());
+    }
+
+    #[Test]
+    public function disablingAnEnabledProductAnnouncesItSoTheEngineLearnsItIsGone(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+
+        $product->setEnabled(false);
+        $this->listener->preUpdate($this->updateArgs($product, ['enabled' => [true, false]]));
+        $this->listener->postUpdate($this->args($product));
+        $this->flush();
+
+        self::assertSame(['product:10'], $this->queued());
+    }
+
+    #[Test]
+    public function enablingADraftAnnouncesIt(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(11, ['de_DE' => 'neuheit'], [$de], enabled: false);
+
+        $product->setEnabled(true);
+        $this->listener->preUpdate($this->updateArgs($product, ['enabled' => [false, true]]));
+        $this->listener->postUpdate($this->args($product));
+        $this->flush();
+
+        self::assertSame(['product:11'], $this->queued());
+    }
+
+    #[Test]
+    public function removingAProductThatWasDisabledInTheSameFlushIsStillAnnounced(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+
+        $product->setEnabled(false);
+        $this->listener->preUpdate($this->updateArgs($product, ['enabled' => [true, false]]));
+        $this->listener->preRemove($this->args($product));
+        $this->flush();
+
+        self::assertSame(['https://shop-domain.de/de_DE/products/zigarre'], $this->queued());
+    }
+
+    #[Test]
+    public function aTaxonFollowsTheSameRule(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $draft = $this->shop->taxon(6, ['de_DE' => 'neu'], enabled: false);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+        $assignment = new ProductTaxon();
+        $assignment->setProduct($product);
+        $assignment->setTaxon($draft);
+
+        $this->listener->postPersist($this->args($draft));
+        $this->listener->postPersist($this->args($assignment));
+        $this->listener->preRemove($this->args($this->shop->taxon(7, ['de_DE' => 'verworfen'], enabled: false)));
+        $this->flush();
+        self::assertSame(['product:10'], $this->queued(), 'a disabled taxon is neither announced nor resolved on removal');
+
+        $public = $this->shop->taxon(5, ['de_DE' => 'zigarren']);
+        $public->setEnabled(false);
+        $this->listener->preUpdate($this->updateArgs($public, ['enabled' => [true, false]]));
+        $this->listener->postUpdate($this->args($public));
+        $this->flush();
+        self::assertSame(['product:10', 'taxon:5'], $this->queued());
+    }
+
+    #[Test]
+    public function onlyAProductOrTaxonCanBeDisabledAndEachFlushStartsAfresh(): void
+    {
+        $de = $this->shop->channels->find(1);
+        self::assertNotNull($de);
+        $product = $this->shop->product(10, ['de_DE' => 'zigarre'], [$de]);
+        $variant = new ProductVariant();
+        $variant->setProduct($product);
+
+        $this->listener->preUpdate($this->updateArgs($variant, ['enabled' => [true, false]]));
+        $product->setEnabled(false);
+        $this->listener->preUpdate($this->updateArgs($product, ['enabled' => [false, false]]));
+        $this->listener->postUpdate($this->args($variant));
+        $this->flush();
+        self::assertSame([], $this->queued(), 'a variant being disabled does not make its disabled product public');
+
+        $product->setEnabled(true);
+        $this->listener->postUpdate($this->args($product));
+        $this->flush();
+        self::assertSame(['product:10'], $this->queued());
+
+        $this->queue->remove(array_map(static fn($item): int => $item->id, $this->queue->due(100)));
+        $this->flush();
+        self::assertSame([], $this->queued(), 'nothing is left over from the previous flush');
+    }
+
+    /** @return list<string> */
+    private function queued(): array
+    {
+        $queued = [];
+        foreach ($this->queue->due(100) as $item) {
+            $subject = $item->subject;
+            $queued[] = $subject->type === Subject::URL ? $subject->url : sprintf('%s:%d', $subject->type, $subject->id);
+        }
+        sort($queued);
+
+        return $queued;
+    }
+
+    private function flush(): void
+    {
+        $this->listener->postFlush(new PostFlushEventArgs($this->createStub(EntityManagerInterface::class)));
+    }
+
+    /** @param array<string, array{mixed, mixed}> $changeSet */
+    private function updateArgs(object $object, array $changeSet): PreUpdateEventArgs
+    {
+        return new PreUpdateEventArgs($object, $this->createStub(EntityManagerInterface::class), $changeSet);
     }
 
     /** @return LifecycleEventArgs<ObjectManager> */

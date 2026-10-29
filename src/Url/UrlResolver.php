@@ -27,7 +27,10 @@ use Symfony\Component\Routing\RequestContext;
  * outside a channel's menu tree is not shown there.
  *
  * Lenient for changes (a disabled product is still announced, so the engine
- * learns it is gone), strict for the go-live submission.
+ * learns it is gone), strict for the go-live submission. Whether a disabled
+ * product or taxon is queued at all is decided earlier: only when it was
+ * enabled before the change (DoctrineChangeListener). A product that was never
+ * public is not announced.
  */
 class UrlResolver
 {
@@ -77,8 +80,9 @@ class UrlResolver
             }
         }
 
+        // The listing changed, so it is worth a re-crawl, but only if it is itself public.
         $mainTaxon = $product->getMainTaxon();
-        if (!$strict && $this->includeMainTaxon && $mainTaxon instanceof TaxonInterface) {
+        if (!$strict && $this->includeMainTaxon && $mainTaxon instanceof TaxonInterface && $mainTaxon->isEnabled()) {
             $urls = [...$urls, ...$this->forTaxon($mainTaxon)];
         }
 

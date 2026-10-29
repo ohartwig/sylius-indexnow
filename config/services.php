@@ -90,6 +90,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(DoctrineChangeListener::class)
         ->args([service(QueueStore::class), service(UrlResolver::class), service('logger')->nullOnInvalid()])
         ->tag('doctrine.event_listener', ['event' => Events::postPersist])
+        ->tag('doctrine.event_listener', ['event' => Events::preUpdate])
         ->tag('doctrine.event_listener', ['event' => Events::postUpdate])
         ->tag('doctrine.event_listener', ['event' => Events::preRemove])
         ->tag('doctrine.event_listener', ['event' => Events::postFlush])

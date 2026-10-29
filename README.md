@@ -63,15 +63,17 @@ exist either.
 
 | Change | Announced |
 |---|---|
-| A product, its translation, variant, price, image or taxon assignment | The product page in every channel it belongs to and every channel locale it has a slug in, plus its main taxon's listing |
+| A product, its translation, variant, price, image or taxon assignment | The product page in every channel it belongs to and every channel locale it has a slug in, plus its main taxon's listing if that taxon is enabled |
 | A taxon or its translation | The taxon page in every channel whose menu tree contains it |
-| A product or taxon is deleted | Its URLs, resolved before the deletion |
+| A product or taxon is deleted | Its URLs, resolved before the deletion, if it was enabled |
 | The go-live | Homepages, enabled products and enabled taxons |
 
 Changes come from Doctrine, so the admin, imports, the API and fixtures are all
-covered. A disabled product is still announced when it changes — the engine has
-to re-crawl to learn it is gone. A translation is required: the fallback
-locale's slug under another locale would be a different page.
+covered. Disabling an enabled product or taxon is announced — the engine has to
+re-crawl to learn it is gone. A product or taxon that was never public is not
+announced: one created disabled, as drafts are, stays silent while it is edited
+or deleted, and is announced once it is enabled. A translation is required: the
+fallback locale's slug under another locale would be a different page.
 
 ## Delivery
 
