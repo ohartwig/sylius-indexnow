@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.25](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.24...v1.0.25) (2026-10-29)
+
+### :bug: Fixes
+
+* do not announce a product or taxon that was never enabled ([f017cc7](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/f017cc7ce26d790d3b3c3afb28125b836f522da5))
+
 ## [1.0.24](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.23...v1.0.24) (2026-10-25)
 
 ### :repeat: Chores
