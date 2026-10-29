@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Koh\IndexNow\Sylius\Change;
 
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Koh\IndexNow\Sylius\Queue\QueueStore;
 use Koh\IndexNow\Sylius\Queue\Reason;
@@ -30,11 +31,24 @@ use Sylius\Component\Taxonomy\Model\TaxonTranslationInterface;
  * translations, variants, prices, images and taxon assignments. Changes are
  * buffered and written in one go after the flush; a failure is logged and
  * never breaks the save that triggered it.
+ *
+ * A product or taxon is announced only when it is enabled after the flush or
+ * was enabled before it. Disabling or removing a public one is announced, so
+ * the engine learns it is gone; one that was never enabled — a draft created
+ * disabled, edited or removed while disabled — is not, because its slug would
+ * reach the engines before the page does. "Before" comes from Doctrine's
+ * change set in preUpdate.
  */
 class DoctrineChangeListener
 {
     /** @var array<string, Subject> */
     private array $subjects = [];
+
+    /** @var array<string, ProductInterface|TaxonInterface> subject key => what decides whether it is public */
+    private array $owners = [];
+
+    /** @var array<string, bool> subject key => enabled before this flush */
+    private array $wasEnabled = [];
 
     public function __construct(
         private readonly QueueStore $queue,
@@ -48,6 +62,19 @@ class DoctrineChangeListener
         $this->collect($args->getObject());
     }
 
+    /** Remember a product or taxon that is being disabled: that is a removal. */
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
+        $object = $args->getObject();
+        if (!$object instanceof ProductInterface && !$object instanceof TaxonInterface) {
+            return;
+        }
+        $subject = self::subjectOf($object);
+        if ($subject !== null && $args->hasChangedField('enabled') && $args->getOldValue('enabled') === true) {
+            $this->wasEnabled[$subject->key()] = true;
+        }
+    }
+
     /** @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -55,28 +82,28 @@ class DoctrineChangeListener
     }
 
     /**
-     * A removed product or taxon has no URL afterwards, so it is resolved now.
+     * A removed product or taxon has no URL afterwards, so it is resolved now —
+     * if it was public; a disabled one never had a URL anyone may know.
      *
      * @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args
      */
     public function preRemove(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
-        try {
-            $urls = match (true) {
-                $object instanceof ProductInterface => $this->urls->forProduct($object),
-                $object instanceof TaxonInterface => $this->urls->forTaxon($object),
-                default => null,
-            };
-        } catch (\Throwable $e) {
-            $this->logger->warning('IndexNow: could not resolve a removed record: {message}', ['message' => $e->getMessage()]);
-            $urls = [];
-        }
-
-        if ($urls === null) {
+        if (!$object instanceof ProductInterface && !$object instanceof TaxonInterface) {
             $this->collect($object);
 
             return;
+        }
+        if (!$this->isOrWasEnabled($object)) {
+            return;
+        }
+
+        try {
+            $urls = $object instanceof ProductInterface ? $this->urls->forProduct($object) : $this->urls->forTaxon($object);
+        } catch (\Throwable $e) {
+            $this->logger->warning('IndexNow: could not resolve a removed record: {message}', ['message' => $e->getMessage()]);
+            $urls = [];
         }
         foreach ($urls as $url) {
             $subject = Subject::url($url);
@@ -86,8 +113,14 @@ class DoctrineChangeListener
 
     public function postFlush(PostFlushEventArgs $args): void
     {
-        $subjects = $this->subjects;
-        $this->subjects = [];
+        $subjects = [];
+        foreach ($this->subjects as $key => $subject) {
+            $owner = $this->owners[$key] ?? null;
+            if ($owner === null || $this->isOrWasEnabled($owner)) {
+                $subjects[$key] = $subject;
+            }
+        }
+        $this->onClear();
         if ($subjects === []) {
             return;
         }
@@ -106,17 +139,40 @@ class DoctrineChangeListener
     public function onClear(): void
     {
         $this->subjects = [];
+        $this->owners = [];
+        $this->wasEnabled = [];
     }
 
     private function collect(object $object): void
     {
-        foreach (self::subjectsOf($object) as $subject) {
-            $this->subjects[$subject->key()] = $subject;
+        foreach (self::ownersOf($object) as $owner) {
+            $subject = self::subjectOf($owner);
+            if ($subject !== null) {
+                $this->subjects[$subject->key()] = $subject;
+                $this->owners[$subject->key()] = $owner;
+            }
         }
     }
 
-    /** @return list<Subject> */
-    private static function subjectsOf(object $object): array
+    private function isOrWasEnabled(ProductInterface|TaxonInterface $owner): bool
+    {
+        $subject = self::subjectOf($owner);
+
+        return $owner->isEnabled() || ($subject !== null && ($this->wasEnabled[$subject->key()] ?? false));
+    }
+
+    private static function subjectOf(ProductInterface|TaxonInterface $owner): ?Subject
+    {
+        $id = $owner->getId();
+        if (!is_int($id)) {
+            return null;
+        }
+
+        return $owner instanceof ProductInterface ? Subject::product($id) : Subject::taxon($id);
+    }
+
+    /** @return list<ProductInterface|TaxonInterface> */
+    private static function ownersOf(object $object): array
     {
         $product = match (true) {
             $object instanceof ProductInterface => $object,
@@ -134,14 +190,14 @@ class DoctrineChangeListener
             default => null,
         };
 
-        $subjects = [];
-        if ($product instanceof ProductInterface && is_int($product->getId())) {
-            $subjects[] = Subject::product($product->getId());
+        $owners = [];
+        if ($product instanceof ProductInterface) {
+            $owners[] = $product;
         }
-        if ($taxon instanceof TaxonInterface && is_int($taxon->getId())) {
-            $subjects[] = Subject::taxon($taxon->getId());
+        if ($taxon instanceof TaxonInterface) {
+            $owners[] = $taxon;
         }
 
-        return $subjects;
+        return $owners;
     }
 }

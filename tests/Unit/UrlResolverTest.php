@@ -124,6 +124,16 @@ final class UrlResolverTest extends TestCase
     }
 
     #[Test]
+    public function aDisabledMainTaxonIsNotDraggedAlong(): void
+    {
+        $shop = new Shop();
+        $de = $shop->channel(1, 'DE', 'shop-domain.de', ['de_DE']);
+        $shop->product(10, ['de_DE' => 'cohiba'], [$de], mainTaxon: $shop->taxon(5, ['de_DE' => 'neu'], enabled: false));
+
+        self::assertSame(['https://shop-domain.de/de_DE/products/cohiba'], $shop->resolver($shop->gate())->resolve(Subject::product(10)));
+    }
+
+    #[Test]
     public function aDisabledTaxonIsAnnouncedAsAChangeButNotAtGoLive(): void
     {
         $shop = new Shop();
