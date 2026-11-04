@@ -2,6 +2,22 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.28](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.27...v1.0.28) (2026-11-04)
+
+### :bug: Fixes
+
+* **wiring:** reset channel gate and change buffers between requests ([8fe0ac5](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/8fe0ac5dc658d7814efb30e7f075c6d56871bdd0))
+* **security:** AUD-053 F01 — replace customer identifiers with placeholders ([ea2ae5b](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/ea2ae5bef7bb148da1bc5126536e8055301109be))
+
+### :white_check_mark: Tests
+
+* **security:** AUD-053 F01 — fix the hygiene test namespace (PSR-4) ([b24cdd7](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/b24cdd70449b253ba7be226c369c397b48c6f159))
+* **security:** AUD-053 F01 — add the customer-name hygiene test ([2a4861d](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/2a4861d21eacb9cb2f96fa60f3640950cbc9af34))
+
+### :repeat: Chores
+
+* **repo-templates:** sync ([f9d1d5f](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/f9d1d5fb437ca1d9c67177c599b9ee1526d4899b))
+
 ## [1.0.27](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.26...v1.0.27) (2026-11-04)
 
 ### :repeat: Chores
