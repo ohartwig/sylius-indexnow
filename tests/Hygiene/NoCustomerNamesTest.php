@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace KohIndexNowSyliusTests\Hygiene;
+namespace Koh\IndexNow\Sylius\Tests\Hygiene;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
