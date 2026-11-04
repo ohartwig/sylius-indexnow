@@ -35,9 +35,9 @@ final class ActivationTest extends TestCase
     public function aDevelopmentChannelHostIsRefusedInProdToo(): void
     {
         $shop = new Shop();
-        $shop->channel(1, 'DE', 'budde.dev.shop-domain.eu');
+        $shop->channel(1, 'DE', 'example.dev.shop-domain.eu');
 
-        self::assertStringContainsString('"dev"', $shop->gate()->forHost('budde.dev.shop-domain.eu')->reason);
+        self::assertStringContainsString('"dev"', $shop->gate()->forHost('example.dev.shop-domain.eu')->reason);
     }
 
     #[Test]
