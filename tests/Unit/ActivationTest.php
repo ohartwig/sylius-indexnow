@@ -32,6 +32,23 @@ final class ActivationTest extends TestCase
     }
 
     #[Test]
+    public function theActivationIsCachedUntilReset(): void
+    {
+        $shop = new Shop();
+        $channel = $shop->channel(1, 'DE', 'shop-domain.de');
+        $gate = $shop->gate();
+
+        self::assertTrue($gate->forHost('shop-domain.de')->active);
+
+        // Disabled in a later request, served by the same long-lived kernel.
+        $channel->setEnabled(false);
+        self::assertTrue($gate->forHost('shop-domain.de')->active);
+
+        $gate->reset();
+        self::assertFalse($gate->forHost('shop-domain.de')->active);
+    }
+
+    #[Test]
     public function aDevelopmentChannelHostIsRefusedInProdToo(): void
     {
         $shop = new Shop();
