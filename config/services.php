@@ -38,7 +38,10 @@ return static function (ContainerConfigurator $container): void {
             param('kernel.secret'),
             param('koh_indexnow.channels'),
             param('koh_indexnow.denied_host_suffixes'),
-        ]);
+        ])
+        // Caches activations per host; a long-lived kernel (FrankenPHP worker
+        // mode) would otherwise keep a channel's old state until it restarts.
+        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(QueueStore::class)
         ->args([service('doctrine.dbal.default_connection')]);
@@ -94,7 +97,12 @@ return static function (ContainerConfigurator $container): void {
         ->tag('doctrine.event_listener', ['event' => Events::postUpdate])
         ->tag('doctrine.event_listener', ['event' => Events::preRemove])
         ->tag('doctrine.event_listener', ['event' => Events::postFlush])
-        ->tag('doctrine.event_listener', ['event' => Events::onClear]);
+        ->tag('doctrine.event_listener', ['event' => Events::onClear])
+        // The buffers hold entity references and are emptied on postFlush and
+        // onClear only. After a failed flush the entity manager is replaced
+        // without a clear(), so in a long-lived kernel (FrankenPHP worker mode)
+        // they would carry the failed request's entities into the next one.
+        ->tag('kernel.reset', ['method' => 'onClear']);
 
     $services->set(SchemaListener::class)
         ->tag('doctrine.event_listener', ['event' => ToolEvents::postGenerateSchema]);

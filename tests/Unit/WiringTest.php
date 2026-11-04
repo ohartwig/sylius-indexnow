@@ -89,6 +89,22 @@ final class WiringTest extends TestCase
         self::assertNotSame('', $migration->getDescription());
     }
 
+    #[Test]
+    public function servicesHoldingRequestStateAreResetBetweenRequests(): void
+    {
+        $container = $this->load([]);
+
+        // Under FrankenPHP worker mode the kernel outlives the request; the
+        // services resetter calls these methods between requests.
+        foreach ([
+            \Koh\IndexNow\Sylius\Activation\ChannelGate::class => 'reset',
+            \Koh\IndexNow\Sylius\Change\DoctrineChangeListener::class => 'onClear',
+        ] as $id => $method) {
+            self::assertSame([['method' => $method]], $container->getDefinition($id)->getTag('kernel.reset'), $id);
+            self::assertTrue(method_exists($id, $method), $id);
+        }
+    }
+
     /** @param array<string, mixed> $config */
     private function load(array $config): ContainerBuilder
     {
