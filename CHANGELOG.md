@@ -2,6 +2,16 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.29](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.28...v1.0.29) (2026-11-06)
+
+### :bug: Fixes
+
+* **deps:** update composer packages ([07be4f1](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/07be4f11487cc095534b575537dbdece0a44a22f))
+
+### :repeat: Chores
+
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.136-8.5 ([339ad2a](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/339ad2af71ba6703ebe135c802d7569dada7576a))
+
 ## [1.0.28](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.27...v1.0.28) (2026-11-04)
 
 ### :bug: Fixes
