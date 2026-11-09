@@ -2,6 +2,28 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.30](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.29...v1.0.30) (2026-11-09)
+
+### :repeat: Chores
+
+* **deps:** update dependency infection/infection to ^0.35.10 ([472ec80](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/472ec8062b5322e275bd7a4e094f5bb089a180ea))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.173-8.5 ([ababe25](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/ababe25d7a0ad88fbb77d9d5c1cdd86a905108f3))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.172-8.5 ([be7b677](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/be7b6777f7dab5769fecab217befdf24318f277e))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.171-8.5 ([5772278](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/5772278e4b196143f15a495b8270ac2e44a1babd))
+* **repo-templates:** sync ([db03a9e](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/db03a9e8f3d92776fef845670ce74273ee8afbda))
+* **repo-templates:** sync ([17f9f9d](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/17f9f9dd9bb422c430414f52d002c843afbfeac4))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.150-8.5 ([3633989](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/3633989219a106db8af3c13868d6450fd72f5b2f))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.149-8.5 ([fed2371](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/fed23711f59c05b78adaa544542314db99b4b05c))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.148-8.5 ([1d14719](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/1d14719461c7623227a6f67d7ae27ff09b7b5bd5))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.147-8.5 ([65b386e](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/65b386e76d5027112786078b7f219817a4a4ad01))
+* **repo-templates:** sync ([324618e](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/324618ebfcb377838698e43a9cb18ee33ec84f9d))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.144-8.5 ([946a84a](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/946a84a7f104c04ba17ada60aaa38120a1b94782))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.143-8.5 ([26bc832](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/26bc8323404716e27cb3a96f3f5801588f1efbd9))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.142-8.5 ([45ddd95](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/45ddd95abe76714e298a1cc818f17b12750344d3))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.139-8.5 ([7a5123e](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/7a5123ef9ec1ffe484dc9635bd54e4d939476bd6))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.138-8.5 ([cc127f2](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/cc127f20e040abc0d05e21e69e98ca2d66cd198a))
+* **deps:** update dependency registry.ole-hartwig.eu/devops/images/franken-php/ci to v3.2.137-8.5 ([a67fbaf](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/a67fbafdb1ddc867b815d9ac3104dc323200da4a))
+
 ## [1.0.29](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.28...v1.0.29) (2026-11-06)
 
 ### :bug: Fixes
