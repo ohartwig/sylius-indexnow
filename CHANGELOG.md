@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.31](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.30...v1.0.31) (2026-11-14)
+
+### :bug: Fixes
+
+* **deps:** update dependency guzzlehttp/psr7 to ^2.13.3 ([cc2cdb1](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/cc2cdb13cb46c6b7adbea3c4ec1b31b9dcf81f62))
+
 ## [1.0.30](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.29...v1.0.30) (2026-11-09)
 
 ### :repeat: Chores
