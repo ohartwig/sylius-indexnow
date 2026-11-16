@@ -44,7 +44,7 @@
         "symfony/routing": "^7.4 || ^8.0"
     },
     "require-dev": {
-        "infection/infection": "^0.35.10",
+        "infection/infection": "^0.35.11",
         "phpstan/phpstan": "^2.3.5",
         "phpunit/phpunit": "^11.5 || ^12.0 || ^13.0"
     },
