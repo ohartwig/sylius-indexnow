@@ -45,7 +45,7 @@
     },
     "require-dev": {
         "infection/infection": "^0.35.11",
-        "phpstan/phpstan": "^2.3.5",
+        "phpstan/phpstan": "^2.3.6",
         "phpunit/phpunit": "^11.5 || ^12.0 || ^13.0"
     },
     "autoload": {
