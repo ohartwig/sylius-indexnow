@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.34](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.33...v1.0.34) (2026-11-17)
+
+### :bug: Fixes
+
+* **composer:** point homepage at the package page ([bb2d275](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/bb2d2755ba3a0b5c5487a277c6bc863dd4d0f5b6))
+
 ## [1.0.33](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.32...v1.0.33) (2026-11-17)
 
 ### :repeat: Chores
