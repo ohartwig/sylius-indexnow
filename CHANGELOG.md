@@ -2,6 +2,12 @@
 
 All notable changes are recorded here by the release tooling.
 
+## [1.0.35](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.34...v1.0.35) (2026-11-18)
+
+### :repeat: Chores
+
+* **deps:** update dependency infection/infection to ^0.35.12 ([a7ab7f3](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/commit/a7ab7f3ddd9c53c7e5cec8f148ee24a825ac9207))
+
 ## [1.0.34](https://git.ole-hartwig.eu/ai-ready-platform/platform/sylius-indexnow/compare/v1.0.33...v1.0.34) (2026-11-17)
 
 ### :bug: Fixes
